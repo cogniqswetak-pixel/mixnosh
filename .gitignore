@@ -1,0 +1,83 @@
+# ── Dependencies ──────────────────────────────────────────
+node_modules/
+.pnp
+.pnp.js
+
+# ── Build Outputs ─────────────────────────────────────────
+dist/
+dist-ssr/
+build/
+out/
+.output/
+
+# ── Environment & Secrets ─────────────────────────────────
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+
+# ── Logs ─────────────────────────────────────────────────
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# ── Cache ────────────────────────────────────────────────
+.cache/
+.vite/
+.turbo/
+.eslintcache
+.stylelintcache
+*.tsbuildinfo
+
+# ── Testing ──────────────────────────────────────────────
+coverage/
+.nyc_output/
+
+# ── macOS ────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# ── Editors & IDEs ────────────────────────────────────────
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.swp
+*.swo
+*~
+
+# ── Vite / Local Dev ──────────────────────────────────────
+*.local
+vite.config.ts.timestamp-*
+vite.config.js.timestamp-*
+
+# ── Yarn / PNPM / npm ────────────────────────────────────
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnpm-store/
+package-lock.json.bak
+
+# ── Misc ────────────────────────────────────────────────
+*.zip
+*.tar.gz
+*.tgz
+tmp/
+temp/
