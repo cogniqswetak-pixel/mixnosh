@@ -6,23 +6,27 @@ import { motion, AnimatePresence } from 'framer-motion';
 const localKnowledge = [
   {
     keywords: ['location', 'where', 'address', 'branch', 'hsr', 'indiranagar'],
-    response: "📍 Mixnosh Cafe has two branches in Bengaluru: \n1. HSR Layout: Near Sector 3.\n2. Indiranagar: Near 100 Feet Road.\nWe'd love to have you visit!"
+    response: "📍 Mixnosh Cafe has two branches in Bengaluru:\n1. HSR Layout: Near Sector 3.\n2. Indiranagar: Near 100 Feet Road.\nWe'd love to have you visit!"
   },
   {
-    keywords: ['workshop', 'sneaker', 'resin', 'art', 'custom', 'paint', 'class'],
-    response: "🎨 We are India's First Sneaker & Resin Art Cafe! We host:\n• Custom Kicks Workshop (Sneaker painting - we provide the sneakers or you can bring yours)\n• Epoxy Resin Decor (Resin art keychains, coasters, and clocks)\nWould you like to book one?"
+    keywords: ['workshop', 'workshops', 'sneaker', 'sneakers', 'resin', 'art', 'custom', 'paint', 'painting', 'class'],
+    response: "🎨 We are India's First Sneaker & Resin Art Cafe! We host:\n• Custom Kicks Workshop: Design & paint your sneakers.\n• Epoxy Resin Decor: Create custom coasters, trays, and art pieces.\nWe provide all the premium supplies! Would you like to book a slot?"
   },
   {
-    keywords: ['book', 'table', 'reserve', 'reservation', 'slot', 'dining'],
-    response: "📅 You can book a table or art experience right here! I can open the Booking Panel for you. Shall we do that? (Or click the 'Book Experience' button on top!)"
+    keywords: ['book', 'booking', 'table', 'reserve', 'reservation', 'slot', 'dining', 'seat'],
+    response: "📅 You can book a table or an art experience slot right here! I can launch the Booking Panel for you. Shall we do that?"
   },
   {
-    keywords: ['menu', 'food', 'drink', 'price', 'coffee', 'pasta', 'burger', 'pav bhaji'],
-    response: "🍔 Our menu is freshly crafted! Popular items:\n• Pav Bhaji with Egg Burji (₹280)\n• Tangy Creamy Blush Pasta (₹340)\n• Gourmet Artisan Burger (₹320)\n• Cozy Hot Chocolate (₹220)\n• Cold Brews & Iced Teas.\nExplore the Menu Journal section on our site!"
+    keywords: ['menu', 'food', 'drink', 'price', 'pricing', 'coffee', 'pasta', 'burger', 'pav bhaji', 'eat', 'dessert'],
+    response: "🍔 Our menu is freshly crafted! Popular items:\n• Pav Bhaji with Egg Burji (₹280)\n• Tangy Creamy Blush Pasta (₹340)\n• Gourmet Artisan Burger (₹320)\n• Cozy Hot Chocolate (₹220)\nVisit the interactive Menu Journal section above to view the full list!"
   },
   {
-    keywords: ['timing', 'time', 'open', 'hour', 'close', 'schedule'],
+    keywords: ['timing', 'timings', 'time', 'open', 'hour', 'hours', 'close', 'closing'],
     response: "🕒 We are open daily from 11:00 AM to 11:00 PM!"
+  },
+  {
+    keywords: ['cafe', 'mixnosh', 'about', 'info', 'information', 'details', 'tell'],
+    response: "🌟 Mixnosh is India's First Sneaker & Resin Art Cafe in Bengaluru! It's a unique creative space where you can enjoy gourmet food, custom paint sneakers, and create epoxy resin art all under one roof. We have branches in HSR Layout and Indiranagar!"
   },
   {
     keywords: ['hi', 'hello', 'hey', 'sup', 'yo'],
@@ -33,11 +37,16 @@ const localKnowledge = [
 const getLocalResponse = (query) => {
   const q = query.toLowerCase();
   for (const item of localKnowledge) {
-    if (item.keywords.some(keyword => q.includes(keyword))) {
+    // Check if any keyword exists as a whole word in the query
+    const matches = item.keywords.some(keyword => {
+      const regex = new RegExp(`\\b${keyword}\\b`, 'i');
+      return regex.test(q);
+    });
+    if (matches) {
       return item.response;
     }
   }
-  return "🤖 I am currently running in offline mode. Paste your Gemini API key in the chat settings (gear icon ⚙️) to unlock full conversation capabilities! \n\nMixnosh Quick Info:\n• Open 11 AM - 11 PM\n• Locations: HSR Layout & Indiranagar\n• Booking: Select 'Book a Table' or 'Workshop Info' below.";
+  return "🤖 I am currently running in offline mode. Paste your Gemini API key in the chat settings (gear icon ⚙️) to unlock full conversation capabilities!\n\nMixnosh Quick Info:\n• India's First Sneaker & Resin Art Cafe\n• Open daily: 11 AM - 11 PM\n• Locations: HSR Layout & Indiranagar\n• Booking: Click 'Book Experience' on top!";
 };
 
 const ChatBot = ({ onOpenBooking }) => {
