@@ -131,9 +131,6 @@ export default function CorporateSection({ onOpenBooking }) {
             {/* Spacious Circular Orbit Container */}
             <div className="relative w-[290px] sm:w-[460px] lg:w-[520px] aspect-square flex items-center justify-center overflow-visible [--orbit-r:-118px] sm:[--orbit-r:-180px] lg:[--orbit-r:-210px] my-4">
 
-              {/* Outer Orbit Guide Ring */}
-              <div className="absolute inset-[6%] sm:inset-[8%] rounded-full border-2 border-dashed border-orange-200/70 pointer-events-none" />
-
               {/* Center Glow */}
               <div className="absolute inset-[30%] sm:inset-[32%] rounded-full bg-gradient-to-br from-orange-100/90 via-amber-50/80 to-orange-50/50 shadow-inner pointer-events-none" />
 
