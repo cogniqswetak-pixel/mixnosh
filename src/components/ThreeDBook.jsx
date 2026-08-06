@@ -91,63 +91,65 @@ export default function ThreeDBook({ pages, activeLocation, onOpenBooking }) {
       </div>
 
       {/* ── REALISTIC 3D HARDCOVER BOOK CASING ── */}
-      <div
-        className="relative mx-auto rounded-2xl bg-[#1e1410] border-2 border-[#3d2e24] transition-all duration-500"
-        style={{
-          perspective: "2000px",
-          boxShadow: "0 32px 80px rgba(0,0,0,0.55), 0 8px 20px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,200,100,0.06)"
-        }}
-      >
-        {/* Rich Dark Leather Casing Texture — top highlight */}
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-amber-800/8 via-transparent to-black/60 pointer-events-none rounded-2xl" />
+      <div className="relative">
 
-        {/* ── VISIBLE LEFT SPINE EDGE — stacked pages from side ── */}
-        <div className="absolute left-0 top-3 bottom-3 w-5 sm:w-6 z-20 pointer-events-none flex flex-col">
-          <div className="flex-1 rounded-l-xl overflow-hidden" style={{
-            background: "repeating-linear-gradient(to bottom, #c8b98a 0px, #c8b98a 1.5px, #ede0c4 1.5px, #ede0c4 4px)",
-            boxShadow: "inset 3px 0 8px rgba(0,0,0,0.25), -2px 0 6px rgba(0,0,0,0.3)"
+        {/* ── GOLDEN SATIN RIBBON — hangs below the book from the spine center ── */}
+        <div
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 z-50 pointer-events-none"
+          style={{ transform: "translateX(-50%) translateY(100%)" }}
+        >
+          {/* Ribbon body with satin sheen */}
+          <div style={{
+            width: "14px",
+            height: "44px",
+            background: "linear-gradient(to right, #b45309 0%, #fbbf24 20%, #fef3c7 45%, #fbbf24 55%, #f59e0b 75%, #b45309 100%)",
+            boxShadow: "2px 0 6px rgba(0,0,0,0.30), -1px 0 4px rgba(0,0,0,0.15), inset 1px 0 3px rgba(255,255,255,0.25)",
+          }} />
+          {/* V-cut tapered tail */}
+          <div style={{
+            width: 0,
+            height: 0,
+            borderLeft: "7px solid transparent",
+            borderRight: "7px solid transparent",
+            borderTop: "9px solid #d97706",
+            filter: "drop-shadow(0 3px 4px rgba(0,0,0,0.25))",
           }} />
         </div>
 
-        {/* ── VISIBLE RIGHT SPINE EDGE — stacked pages from side ── */}
-        <div className="absolute right-0 top-3 bottom-3 w-5 sm:w-6 z-20 pointer-events-none flex flex-col">
-          <div className="flex-1 rounded-r-xl overflow-hidden" style={{
-            background: "repeating-linear-gradient(to bottom, #c8b98a 0px, #c8b98a 1.5px, #ede0c4 1.5px, #ede0c4 4px)",
-            boxShadow: "inset -3px 0 8px rgba(0,0,0,0.25), 2px 0 6px rgba(0,0,0,0.3)"
-          }} />
-        </div>
+        <div
+          className="relative mx-auto rounded-2xl bg-[#1e1410] border-2 border-[#3d2e24] transition-all duration-500"
+          style={{
+            perspective: "2000px",
+            boxShadow: "0 28px 72px rgba(0,0,0,0.55), 0 6px 18px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,200,100,0.06)"
+          }}
+        >
+          {/* Leather texture highlight */}
+          <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-amber-800/8 via-transparent to-black/55 pointer-events-none" />
 
-        {/* Outer Hardcover Inner Margin */}
-        <div className="relative rounded-xl mx-5 sm:mx-6 my-3 bg-[#17110d] border-y border-[#4a382c]/50 shadow-inner overflow-visible">
+          {/* ── THIN PAGE-EDGE BARS — left and right side, inside the cover ── */}
+          {/* Left bar: only 8px wide, flush to inner edge */}
+          <div
+            className="absolute left-2 top-4 bottom-4 z-10 pointer-events-none rounded-sm"
+            style={{
+              width: "8px",
+              background: "repeating-linear-gradient(to bottom, #b8a87a 0px, #b8a87a 1.2px, #ede0c4 1.2px, #ede0c4 3.5px)",
+              boxShadow: "inset 2px 0 5px rgba(0,0,0,0.22), 1px 0 4px rgba(0,0,0,0.18)",
+              opacity: 0.9,
+            }}
+          />
+          {/* Right bar */}
+          <div
+            className="absolute right-2 top-4 bottom-4 z-10 pointer-events-none rounded-sm"
+            style={{
+              width: "8px",
+              background: "repeating-linear-gradient(to bottom, #b8a87a 0px, #b8a87a 1.2px, #ede0c4 1.2px, #ede0c4 3.5px)",
+              boxShadow: "inset -2px 0 5px rgba(0,0,0,0.22), -1px 0 4px rgba(0,0,0,0.18)",
+              opacity: 0.9,
+            }}
+          />
 
-          {/* ── IMPROVED RIBBON BOOKMARK ── */}
-          {/* Ribbon anchor behind the pages at spine bottom */}
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center pointer-events-none">
-            {/* Ribbon body — tapers slightly */}
-            <div
-              style={{
-                width: "18px",
-                height: "52px",
-                background: "linear-gradient(to right, #f59e0b 0%, #fbbf24 30%, #f59e0b 50%, #d97706 70%, #fbbf24 85%, #f59e0b 100%)",
-                boxShadow: "0 6px 18px rgba(0,0,0,0.35), inset 2px 0 4px rgba(255,255,255,0.15), inset -2px 0 4px rgba(0,0,0,0.12)",
-                borderLeft: "1px solid rgba(255,220,100,0.4)",
-                borderRight: "1px solid rgba(180,110,0,0.3)",
-                transform: "translateY(100%)"
-              }}
-            />
-            {/* Tapered V-cut ribbon tail */}
-            <div
-              style={{
-                width: 0,
-                height: 0,
-                borderLeft: "9px solid transparent",
-                borderRight: "9px solid transparent",
-                borderTop: "10px solid #f59e0b",
-                filter: "drop-shadow(0 4px 6px rgba(0,0,0,0.3))",
-                transform: "translateY(calc(100% - 52px))"
-              }}
-            />
-          </div>
+          {/* Inner page area margin */}
+          <div className="relative rounded-xl mx-4 my-3 bg-[#17110d] border-y border-[#4a382c]/50 shadow-inner overflow-hidden">
 
           {/* ── OPEN BOOK SPREAD ── */}
           <div
@@ -417,28 +419,31 @@ export default function ThreeDBook({ pages, activeLocation, onOpenBooking }) {
               </div>
             )}
           </div>
+          </div>
         </div>
 
         {/* ── BOTTOM JOURNAL CONTROLS ── */}
-        <div className="mt-5 flex items-center justify-between text-xs text-amber-200/80 font-bold uppercase tracking-wider px-6 sm:px-8">
+        <div className="mt-8 flex items-center justify-between px-0">
           <button
             onClick={handlePrev}
             disabled={currentPage === 0 || isFlipping}
-            className="hover:text-amber-400 disabled:opacity-30 transition-colors flex items-center gap-1 cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#1e1410] border border-amber-800/40 text-amber-300/80 text-xs font-bold uppercase tracking-wider hover:bg-amber-900/40 hover:text-amber-200 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-md cursor-pointer"
           >
-            ← Previous Page
+            <ChevronLeft className="w-4 h-4" />
+            Prev
           </button>
 
-          <span className="text-[10px] text-amber-300/60 font-semibold tracking-widest hidden sm:inline">
-            ✦ Hardcover Leather Menu Journal ✦
+          <span className="text-[10px] text-amber-700/70 font-semibold tracking-widest hidden sm:inline">
+            ✦ Hardcover Leather Menu ✦
           </span>
 
           <button
             onClick={handleNext}
             disabled={currentPage === totalPages - 1 || isFlipping}
-            className="hover:text-amber-400 disabled:opacity-30 transition-colors flex items-center gap-1 cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#1e1410] border border-amber-800/40 text-amber-300/80 text-xs font-bold uppercase tracking-wider hover:bg-amber-900/40 hover:text-amber-200 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-md cursor-pointer"
           >
-            Next Page →
+            Next
+            <ChevronRight className="w-4 h-4" />
           </button>
         </div>
       </div>
