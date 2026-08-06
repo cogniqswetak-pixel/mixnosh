@@ -143,10 +143,10 @@ export default function ThreeDBook({ pages, activeLocation, onOpenBooking }) {
                 <div className="border-b-2 border-orange-500/80 pb-3 mb-6 flex items-center justify-between">
                   <div>
                     <span className="text-[10px] font-black uppercase tracking-widest text-orange-600">
-                      {isFlipping && flipDirection === "prev" ? prevSpread.category : activeSpread.category}
+                      Menu Category
                     </span>
                     <h3 className="font-heading font-black text-xl sm:text-2xl text-neutral-900 uppercase tracking-tight">
-                      Signatures &amp; Mains
+                      {(isFlipping && flipDirection === "prev" ? prevSpread : activeSpread).category}
                     </h3>
                   </div>
                   <span className="text-[10px] font-extrabold text-neutral-400 uppercase tracking-widest border border-amber-300/60 px-2 py-0.5 rounded bg-amber-50/60">
@@ -156,25 +156,32 @@ export default function ThreeDBook({ pages, activeLocation, onOpenBooking }) {
 
                 <div className="space-y-6">
                   {(isFlipping && flipDirection === "prev" ? prevSpread : activeSpread).leftPage.map((item, i) => (
-                    <div key={i} className="group">
-                      <div className="flex items-baseline justify-between gap-2">
-                        <h4 className="font-heading font-bold text-sm sm:text-base text-neutral-900 uppercase tracking-tight group-hover:text-orange-600 transition-colors">
-                          {item.name}
-                        </h4>
-                        <span className="border-b border-dotted border-neutral-400 flex-grow mx-2" />
-                        <span className="font-heading font-black text-base sm:text-lg text-orange-600 shrink-0">
-                          {item.price}
-                        </span>
-                      </div>
-                      {item.tag && (
-                        <span className="inline-flex items-center gap-1 mt-1 text-[9.5px] font-extrabold uppercase tracking-wider text-amber-900 bg-amber-200/80 px-2 py-0.5 rounded shadow-sm">
-                          <Sparkles className="w-2.5 h-2.5 text-amber-700" />
-                          {item.tag}
-                        </span>
+                    <div key={i} className="group flex gap-3 items-start">
+                      {item.image && (
+                        <div className="w-12 h-12 rounded-xl overflow-hidden shrink-0 border border-amber-200 shadow-sm mt-0.5">
+                          <img src={item.image} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
+                        </div>
                       )}
-                      <p className="text-neutral-600 text-xs leading-relaxed mt-1 font-medium">
-                        {item.desc}
-                      </p>
+                      <div className="flex-1">
+                        <div className="flex items-baseline justify-between gap-2">
+                          <h4 className="font-heading font-bold text-sm sm:text-base text-neutral-900 uppercase tracking-tight group-hover:text-orange-600 transition-colors">
+                            {item.name}
+                          </h4>
+                          <span className="border-b border-dotted border-neutral-400 flex-grow mx-2" />
+                          <span className="font-heading font-black text-base sm:text-lg text-orange-600 shrink-0">
+                            {item.price}
+                          </span>
+                        </div>
+                        {item.tag && (
+                          <span className="inline-flex items-center gap-1 mt-0.5 text-[9.5px] font-extrabold uppercase tracking-wider text-amber-900 bg-amber-200/80 px-2 py-0.5 rounded shadow-sm">
+                            <Sparkles className="w-2.5 h-2.5 text-amber-700" />
+                            {item.tag}
+                          </span>
+                        )}
+                        <p className="text-neutral-600 text-xs leading-relaxed mt-1 font-medium">
+                          {item.desc}
+                        </p>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -200,10 +207,10 @@ export default function ThreeDBook({ pages, activeLocation, onOpenBooking }) {
                 <div className="border-b-2 border-amber-500/80 pb-3 mb-6 flex items-center justify-between">
                   <div>
                     <span className="text-[10px] font-black uppercase tracking-widest text-amber-600">
-                      {isFlipping && flipDirection === "next" ? nextSpread.subtitle : activeSpread.subtitle}
+                      Chef Selection
                     </span>
                     <h3 className="font-heading font-black text-xl sm:text-2xl text-neutral-900 uppercase tracking-tight">
-                      Specialties &amp; Brews
+                      {(isFlipping && flipDirection === "next" ? nextSpread : activeSpread).subtitle}
                     </h3>
                   </div>
                   <span className="text-[10px] font-extrabold text-neutral-400 uppercase tracking-widest border border-amber-300/60 px-2 py-0.5 rounded bg-amber-50/60">
@@ -213,25 +220,32 @@ export default function ThreeDBook({ pages, activeLocation, onOpenBooking }) {
 
                 <div className="space-y-6">
                   {(isFlipping && flipDirection === "next" ? nextSpread : activeSpread).rightPage.map((item, i) => (
-                    <div key={i} className="group">
-                      <div className="flex items-baseline justify-between gap-2">
-                        <h4 className="font-heading font-bold text-sm sm:text-base text-neutral-900 uppercase tracking-tight group-hover:text-orange-600 transition-colors">
-                          {item.name}
-                        </h4>
-                        <span className="border-b border-dotted border-neutral-400 flex-grow mx-2" />
-                        <span className="font-heading font-black text-base sm:text-lg text-orange-600 shrink-0">
-                          {item.price}
-                        </span>
-                      </div>
-                      {item.tag && (
-                        <span className="inline-flex items-center gap-1 mt-1 text-[9.5px] font-extrabold uppercase tracking-wider text-orange-900 bg-orange-200/80 px-2 py-0.5 rounded shadow-sm">
-                          <Sparkles className="w-2.5 h-2.5 text-orange-700" />
-                          {item.tag}
-                        </span>
+                    <div key={i} className="group flex gap-3 items-start">
+                      {item.image && (
+                        <div className="w-12 h-12 rounded-xl overflow-hidden shrink-0 border border-amber-200 shadow-sm mt-0.5">
+                          <img src={item.image} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300" />
+                        </div>
                       )}
-                      <p className="text-neutral-600 text-xs leading-relaxed mt-1 font-medium">
-                        {item.desc}
-                      </p>
+                      <div className="flex-1">
+                        <div className="flex items-baseline justify-between gap-2">
+                          <h4 className="font-heading font-bold text-sm sm:text-base text-neutral-900 uppercase tracking-tight group-hover:text-orange-600 transition-colors">
+                            {item.name}
+                          </h4>
+                          <span className="border-b border-dotted border-neutral-400 flex-grow mx-2" />
+                          <span className="font-heading font-black text-base sm:text-lg text-orange-600 shrink-0">
+                            {item.price}
+                          </span>
+                        </div>
+                        {item.tag && (
+                          <span className="inline-flex items-center gap-1 mt-0.5 text-[9.5px] font-extrabold uppercase tracking-wider text-orange-900 bg-orange-200/80 px-2 py-0.5 rounded shadow-sm">
+                            <Sparkles className="w-2.5 h-2.5 text-orange-700" />
+                            {item.tag}
+                          </span>
+                        )}
+                        <p className="text-neutral-600 text-xs leading-relaxed mt-1 font-medium">
+                          {item.desc}
+                        </p>
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -259,7 +273,7 @@ export default function ThreeDBook({ pages, activeLocation, onOpenBooking }) {
             >
               {/* FRONT FACE OF FLIPPING SHEET */}
               <div
-                className="absolute inset-0 p-6 sm:p-8 md:p-10 flex flex-col justify-between border-l border-[#e3d8c5] shadow-2xl"
+                className="absolute inset-0 p-6 sm:p-8 md:p-10 flex flex-col justify-between border-l border-[#e3d8c5] shadow-2xl overflow-hidden"
                 style={{
                   backfaceVisibility: "hidden",
                   background: "linear-gradient(to left, #f2ebd9 0%, #faf6ee 10%, #faf6ee 90%, #e5dbc7 100%)",
@@ -267,27 +281,39 @@ export default function ThreeDBook({ pages, activeLocation, onOpenBooking }) {
               >
                 <div>
                   <div className="border-b-2 border-amber-500/80 pb-3 mb-6 flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-amber-600">
-                      {activeSpread.subtitle}
-                    </span>
+                    <div>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-amber-600">
+                        Chef Selection
+                      </span>
+                      <h3 className="font-heading font-black text-xl sm:text-2xl text-neutral-900 uppercase tracking-tight">
+                        {activeSpread.subtitle}
+                      </h3>
+                    </div>
                     <span className="text-[10px] font-extrabold text-neutral-400 uppercase tracking-widest border border-amber-300/60 px-2 py-0.5 rounded bg-amber-50/60">
                       Mixnosh
                     </span>
                   </div>
                   <div className="space-y-6">
                     {activeSpread.rightPage.map((item, i) => (
-                      <div key={i}>
-                        <div className="flex items-baseline justify-between gap-2">
-                          <h4 className="font-heading font-bold text-sm sm:text-base text-neutral-900 uppercase tracking-tight">
-                            {item.name}
-                          </h4>
-                          <span className="font-heading font-black text-base sm:text-lg text-orange-600 shrink-0">
-                            {item.price}
-                          </span>
+                      <div key={i} className="flex gap-3 items-start">
+                        {item.image && (
+                          <div className="w-12 h-12 rounded-xl overflow-hidden shrink-0 border border-amber-200 shadow-sm mt-0.5">
+                            <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                          </div>
+                        )}
+                        <div className="flex-1">
+                          <div className="flex items-baseline justify-between gap-2">
+                            <h4 className="font-heading font-bold text-sm sm:text-base text-neutral-900 uppercase tracking-tight">
+                              {item.name}
+                            </h4>
+                            <span className="font-heading font-black text-base sm:text-lg text-orange-600 shrink-0">
+                              {item.price}
+                            </span>
+                          </div>
+                          <p className="text-neutral-600 text-xs leading-relaxed mt-1 font-medium">
+                            {item.desc}
+                          </p>
                         </div>
-                        <p className="text-neutral-600 text-xs leading-relaxed mt-1 font-medium">
-                          {item.desc}
-                        </p>
                       </div>
                     ))}
                   </div>
@@ -298,7 +324,7 @@ export default function ThreeDBook({ pages, activeLocation, onOpenBooking }) {
 
               {/* BACK FACE OF FLIPPING SHEET */}
               <div
-                className="absolute inset-0 p-6 sm:p-8 md:p-10 flex flex-col justify-between border-r border-[#e3d8c5] shadow-2xl"
+                className="absolute inset-0 p-6 sm:p-8 md:p-10 flex flex-col justify-between border-r border-[#e3d8c5] shadow-2xl overflow-hidden"
                 style={{
                   backfaceVisibility: "hidden",
                   transform: "rotateY(180deg)",
@@ -307,27 +333,39 @@ export default function ThreeDBook({ pages, activeLocation, onOpenBooking }) {
               >
                 <div>
                   <div className="border-b-2 border-orange-500/80 pb-3 mb-6 flex items-center justify-between">
-                    <span className="text-[10px] font-black uppercase tracking-widest text-orange-600">
-                      {nextSpread.category}
-                    </span>
+                    <div>
+                      <span className="text-[10px] font-black uppercase tracking-widest text-orange-600">
+                        Menu Category
+                      </span>
+                      <h3 className="font-heading font-black text-xl sm:text-2xl text-neutral-900 uppercase tracking-tight">
+                        {nextSpread.category}
+                      </h3>
+                    </div>
                     <span className="text-[10px] font-extrabold text-neutral-400 uppercase tracking-widest border border-amber-300/60 px-2 py-0.5 rounded bg-amber-50/60">
                       Mixnosh
                     </span>
                   </div>
                   <div className="space-y-6">
                     {nextSpread.leftPage.map((item, i) => (
-                      <div key={i}>
-                        <div className="flex items-baseline justify-between gap-2">
-                          <h4 className="font-heading font-bold text-sm sm:text-base text-neutral-900 uppercase tracking-tight">
-                            {item.name}
-                          </h4>
-                          <span className="font-heading font-black text-base sm:text-lg text-orange-600 shrink-0">
-                            {item.price}
-                          </span>
+                      <div key={i} className="flex gap-3 items-start">
+                        {item.image && (
+                          <div className="w-12 h-12 rounded-xl overflow-hidden shrink-0 border border-amber-200 shadow-sm mt-0.5">
+                            <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                          </div>
+                        )}
+                        <div className="flex-1">
+                          <div className="flex items-baseline justify-between gap-2">
+                            <h4 className="font-heading font-bold text-sm sm:text-base text-neutral-900 uppercase tracking-tight">
+                              {item.name}
+                            </h4>
+                            <span className="font-heading font-black text-base sm:text-lg text-orange-600 shrink-0">
+                              {item.price}
+                            </span>
+                          </div>
+                          <p className="text-neutral-600 text-xs leading-relaxed mt-1 font-medium">
+                            {item.desc}
+                          </p>
                         </div>
-                        <p className="text-neutral-600 text-xs leading-relaxed mt-1 font-medium">
-                          {item.desc}
-                        </p>
                       </div>
                     ))}
                   </div>
