@@ -1,8 +1,24 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, Key, Settings, Sparkles, RefreshCw, CheckCircle2 } from 'lucide-react';
+import { MessageCircle, X, Send, Sparkles, RefreshCw } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// Basic Local Mock Knowledge Base fallback when no API key is provided
+// ── GROQ API KEY (loaded from env, clears any stale localStorage token) ──
+const GROQ_KEY = import.meta.env.VITE_GEMINI_API_KEY || '';
+
+// Clear any old expired AQ... tokens from localStorage so they don't override
+if (typeof window !== 'undefined') {
+  const stored = localStorage.getItem('gemini_api_key') || '';
+  if (stored && !stored.startsWith('gsk_') && !stored.startsWith('AIzaSy')) {
+    localStorage.removeItem('gemini_api_key');
+  }
+}
+
+const getActiveKey = () => {
+  const stored = localStorage.getItem('gemini_api_key') || '';
+  return stored || GROQ_KEY;
+};
+
+// ── LOCAL OFFLINE KNOWLEDGE BASE ──
 const localKnowledge = [
   {
     keywords: ['location', 'where', 'address', 'branch', 'hsr', 'indiranagar'],
@@ -10,7 +26,7 @@ const localKnowledge = [
   },
   {
     keywords: ['workshop', 'workshops', 'sneaker', 'sneakers', 'resin', 'art', 'custom', 'paint', 'painting', 'class'],
-    response: "🎨 We are India's First Sneaker & Resin Art Cafe! We host:\n• Custom Kicks Workshop: Design & paint your sneakers.\n• Epoxy Resin Decor: Create custom coasters, trays, and art pieces.\nWe provide all the premium supplies! Would you like to book a slot?"
+    response: "🎨 We are India's First Sneaker & Resin Art Cafe! We host:\n• Custom Kicks Workshop: Design & paint your sneakers.\n• Epoxy Resin Decor: Create custom coasters, trays, and art pieces.\nWe provide all premium supplies! Would you like to book a slot?"
   },
   {
     keywords: ['book', 'booking', 'table', 'reserve', 'reservation', 'slot', 'dining', 'seat'],
@@ -29,8 +45,8 @@ const localKnowledge = [
     response: "🌟 Mixnosh is India's First Sneaker & Resin Art Cafe in Bengaluru! It's a unique creative space where you can enjoy gourmet food, custom paint sneakers, and create epoxy resin art all under one roof. We have branches in HSR Layout and Indiranagar!"
   },
   {
-    keywords: ['question', 'questions', 'ask', 'help', 'do', 'capabilities', 'features'],
-    response: "💬 You can ask me about:\n• 📍 Our locations (HSR Layout & Indiranagar)\n• 🎨 Art workshops (Sneaker customization & Resin decor)\n• 🍔 Our menu food items & pricing\n• 🕒 Opening timings & hours\n• 📅 How to book a table or experience slot\n\nOr click the gear icon (⚙️) to add a Gemini API Key to chat freely!"
+    keywords: ['question', 'questions', 'ask', 'help', 'capabilities', 'features'],
+    response: "💬 You can ask me about:\n• 📍 Our locations (HSR Layout & Indiranagar)\n• 🎨 Art workshops (Sneaker customization & Resin decor)\n• 🍔 Our menu food items & pricing\n• 🕒 Opening timings & hours\n• 📅 How to book a table or experience slot"
   },
   {
     keywords: ['hi', 'hello', 'hey', 'sup', 'yo'],
@@ -41,76 +57,20 @@ const localKnowledge = [
 const getLocalResponse = (query) => {
   const q = query.toLowerCase();
   for (const item of localKnowledge) {
-    // Check if any keyword exists as a whole word in the query
     const matches = item.keywords.some(keyword => {
       const regex = new RegExp(`\\b${keyword}\\b`, 'i');
       return regex.test(q);
     });
-    if (matches) {
-      return item.response;
-    }
+    if (matches) return item.response;
   }
-  return "🤖 I am currently running in offline mode. Paste your Gemini API key in the chat settings (gear icon ⚙️) to unlock full conversation capabilities!\n\nMixnosh Quick Info:\n• India's First Sneaker & Resin Art Cafe\n• Open daily: 11 AM - 11 PM\n• Locations: HSR Layout & Indiranagar\n• Booking: Click 'Book Experience' on top!";
+  return "🤖 I didn't quite catch that! Try asking about our menu, workshops, location, timings, or how to book a table. I'm here to help! 😊";
 };
 
-const ChatBot = ({ onOpenBooking }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      type: 'bot',
-      text: "Hey! 👋 Welcome to Mixnosh — India's First Sneaker & Resin Art Cafe! How can I help you today?",
-    }
-  ]);
-  const [inputValue, setInputValue] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
-  const [apiKey, setApiKey] = useState(() => localStorage.getItem('gemini_api_key') || import.meta.env.VITE_GEMINI_API_KEY || '');
-  const [tempApiKey, setTempApiKey] = useState(() => localStorage.getItem('gemini_api_key') || import.meta.env.VITE_GEMINI_API_KEY || '');
-  const [keySaved, setKeySaved] = useState(false);
-
-  const messagesEndRef = useRef(null);
-
-  const toggleChat = () => setIsOpen(!isOpen);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  useEffect(() => {
-    if (isOpen) {
-      scrollToBottom();
-    }
-  }, [messages, isOpen, isLoading]);
-
-  const handleSaveKey = (e) => {
-    e.preventDefault();
-    const cleanKey = tempApiKey.trim();
-    setApiKey(cleanKey);
-    localStorage.setItem('gemini_api_key', cleanKey);
-    setKeySaved(true);
-    setTimeout(() => {
-      setKeySaved(false);
-      setShowSettings(false);
-    }, 1200);
-
-    // Append bot confirmation message
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: Date.now(),
-        type: 'bot',
-        text: cleanKey
-          ? "🔑 API Key configured successfully! I will now respond using live AI. Ask me anything!"
-          : "ℹ️ API Key removed. Reverted to local fallback response assistant."
-      }
-    ]);
-  };
-
-  const askAI = async (userText) => {
-    const systemPrompt = `You are the Mixnosh Assistant, a friendly and helpful AI host for Mixnosh Cafe.
-Mixnosh is India's First Sneaker & Resin Art Cafe, located in Bengaluru (HSR Layout and Indiranagar).
-We offer premium custom painted sneakers, resin art workshops, custom resin keychains/coasters, and top-tier gourmet fusion food.
+// ── AI API CALL (Groq primary, Gemini fallback) ──
+const askAI = async (userText, key) => {
+  const systemPrompt = `You are the Mixnosh Assistant, a friendly and helpful AI host for Mixnosh Cafe.
+Mixnosh is India's First Sneaker & Resin Art Cafe, located in Bengaluru (HSR Layout and Indiranagar branches).
+We offer premium custom painted sneakers, resin art workshops, and top-tier gourmet fusion food.
 Cafe Hours: 11:00 AM to 11:00 PM daily.
 
 Menu highlights:
@@ -125,116 +85,107 @@ Workshops:
 - Custom Kicks Workshop (Sneaker customization)
 - Epoxy Resin Decor (Resin coasters, clocks, trays)
 
-Answer the user's questions in a friendly, conversational, and brief manner. Be warm and invite them to visit!`;
+Keep responses friendly, warm, helpful, and brief (2-3 sentences max). Always invite the user to visit!`;
 
-    const key = apiKey.trim();
-    const isGroq = key.startsWith('gsk_');
-    const isGemini = key.startsWith('AIzaSy');
+  const isGroq = key.startsWith('gsk_');
+  const isGemini = key.startsWith('AIzaSy');
 
-    try {
-      if (isGroq) {
-        // ── GROQ API (OpenAI-compatible) ──
-        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${key}`,
-          },
-          body: JSON.stringify({
-            model: 'llama-3.3-70b-versatile',
-            messages: [
-              { role: 'system', content: systemPrompt },
-              { role: 'user', content: userText },
-            ],
-            max_tokens: 300,
-            temperature: 0.7,
-          }),
-        });
-        if (!response.ok) {
-          const err = await response.json().catch(() => ({}));
-          throw new Error(`Groq Error ${response.status}: ${err?.error?.message || response.statusText}`);
-        }
-        const data = await response.json();
-        return data.choices?.[0]?.message?.content?.trim() || "I couldn't process that. Please try again!";
-
-      } else if (isGemini) {
-        // ── GOOGLE GEMINI API ──
-        const response = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: `${systemPrompt}\n\nUser: ${userText}` }] }],
-              generationConfig: { maxOutputTokens: 300, temperature: 0.7 },
-            }),
-          }
-        );
-        if (!response.ok) throw new Error(`Gemini Error ${response.status}: ${response.statusText}`);
-        const data = await response.json();
-        return data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "I couldn't process that. Please try again!";
-
-      } else {
-        // ── BEARER TOKEN (AQ...) fallback ──
-        const response = await fetch(
-          'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: `${systemPrompt}\n\nUser: ${userText}` }] }],
-              generationConfig: { maxOutputTokens: 300, temperature: 0.7 },
-            }),
-          }
-        );
-        if (!response.ok) {
-          if (response.status === 401) throw new Error("401 Unauthorized. This token has expired (AQ... tokens expire after 60 mins). Use a Groq key (gsk_...) or Gemini key (AIzaSy...) instead.");
-          throw new Error(`API Error ${response.status}: ${response.statusText}`);
-        }
-        const data = await response.json();
-        return data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "I couldn't process that. Please try again!";
+  try {
+    if (isGroq) {
+      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${key}`,
+        },
+        body: JSON.stringify({
+          model: 'llama-3.3-70b-versatile',
+          messages: [
+            { role: 'system', content: systemPrompt },
+            { role: 'user', content: userText },
+          ],
+          max_tokens: 300,
+          temperature: 0.7,
+        }),
+      });
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        throw new Error(errData?.error?.message || `Error ${res.status}`);
       }
-    } catch (err) {
-      console.error(err);
-      return `⚠️ AI Error:\n${err.message || 'Unable to fetch response'}\n\n👉 Get a free Groq key at: https://console.groq.com`;
+      const data = await res.json();
+      return data.choices?.[0]?.message?.content?.trim() || "I couldn't process that. Please try again!";
+
+    } else if (isGemini) {
+      const res = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: `${systemPrompt}\n\nUser: ${userText}` }] }],
+            generationConfig: { maxOutputTokens: 300, temperature: 0.7 },
+          }),
+        }
+      );
+      if (!res.ok) throw new Error(`Gemini Error ${res.status}`);
+      const data = await res.json();
+      return data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "I couldn't process that. Please try again!";
     }
+
+    // Unknown key type — fall through to local
+    return null;
+  } catch (err) {
+    console.error('AI Error:', err);
+    return null; // Fall through to local knowledge
+  }
+};
+
+const ChatBot = ({ onOpenBooking }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [messages, setMessages] = useState([
+    {
+      id: 1,
+      type: 'bot',
+      text: "Hey! 👋 Welcome to Mixnosh — India's First Sneaker & Resin Art Cafe! How can I help you today?",
+    }
+  ]);
+  const [inputValue, setInputValue] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const messagesEndRef = useRef(null);
+  const activeKey = getActiveKey();
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  useEffect(() => {
+    if (isOpen) scrollToBottom();
+  }, [messages, isOpen, isLoading]);
 
   const handleSendMessage = async (textToSend) => {
     const promptText = textToSend || inputValue.trim();
     if (!promptText) return;
+    if (!textToSend) setInputValue('');
 
-    if (!textToSend) {
-      setInputValue('');
-    }
-
-    // Add user message
-    setMessages((prev) => [...prev, { id: Date.now(), type: 'user', text: promptText }]);
+    setMessages(prev => [...prev, { id: Date.now(), type: 'user', text: promptText }]);
     setIsLoading(true);
 
-    // Call API or Fallback
     let botResponse = '';
-    if (apiKey) {
-      botResponse = await askAI(promptText);
+    if (activeKey) {
+      const aiReply = await askAI(promptText, activeKey);
+      botResponse = aiReply || getLocalResponse(promptText);
     } else {
-      // Mock delay
-      await new Promise(resolve => setTimeout(resolve, 800));
+      await new Promise(r => setTimeout(r, 600));
       botResponse = getLocalResponse(promptText);
-
-      // Handle interactive hooks for quick booking
-      if (promptText === 'Book a Table') {
-        if (onOpenBooking) {
-          setTimeout(() => onOpenBooking(), 500);
-        }
-      }
     }
 
-    setMessages((prev) => [...prev, { id: Date.now() + 1, type: 'bot', text: botResponse }]);
-    setIsLoading(false);
-  };
+    if (promptText === 'Book a Table' && onOpenBooking) {
+      setTimeout(() => onOpenBooking(), 500);
+    }
 
-  const handleQuickAction = (action) => {
-    handleSendMessage(action);
+    setMessages(prev => [...prev, { id: Date.now() + 1, type: 'bot', text: botResponse }]);
+    setIsLoading(false);
   };
 
   return (
@@ -242,173 +193,98 @@ Answer the user's questions in a friendly, conversational, and brief manner. Be 
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 30 }}
+            initial={{ opacity: 0, scale: 0.92, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 30 }}
-            className="fixed bottom-[84px] right-3 left-3 sm:left-auto sm:right-6 z-50 flex h-[500px] sm:w-[360px] flex-col overflow-hidden rounded-2xl border border-[#3d2e24]/20 bg-white shadow-2xl"
+            exit={{ opacity: 0, scale: 0.92, y: 20 }}
+            transition={{ type: 'spring', damping: 20, stiffness: 300 }}
+            className="fixed bottom-[84px] right-3 left-3 sm:left-auto sm:right-6 z-50 flex sm:w-[360px] flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-2xl"
+            style={{ height: 'min(560px, calc(100vh - 120px))' }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between bg-zinc-900 p-4 text-white">
+            <div className="flex items-center justify-between bg-zinc-900 px-4 py-3.5 text-white shrink-0">
               <div className="flex items-center gap-2.5">
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-orange-500 to-amber-500">
-                  <MessageCircle className="h-4.5 w-4.5 text-white" />
+                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-orange-500 to-amber-500 shadow-md">
+                  <MessageCircle className="h-5 w-5 text-white" />
                 </div>
                 <div>
                   <div className="flex items-center gap-1.5">
                     <span className="font-bold text-sm tracking-tight">Mixnosh Assistant</span>
-                    {apiKey && (
-                      <span className="flex items-center gap-0.5 rounded bg-orange-500/20 px-1 py-0.5 text-[9px] font-black uppercase text-orange-400">
-                        <Sparkles className="h-2 w-2" /> Live
+                    {activeKey && (
+                      <span className="flex items-center gap-0.5 rounded bg-orange-500/20 px-1.5 py-0.5 text-[9px] font-black uppercase text-orange-400 tracking-wide">
+                        <Sparkles className="h-2.5 w-2.5" /> Live AI
                       </span>
                     )}
                   </div>
-                  <span className="text-[10px] text-neutral-400 font-medium">Online &amp; ready</span>
+                  <span className="text-[10px] text-neutral-400 font-medium">Online & ready to help</span>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => setShowSettings(!showSettings)}
-                  className="rounded-full p-1.5 text-neutral-400 hover:bg-zinc-800 hover:text-white transition-colors"
-                  title="Configure Gemini API Key"
-                >
-                  <Settings className="h-4 w-4" />
-                </button>
-                <button
-                  onClick={toggleChat}
-                  className="rounded-full p-1.5 text-neutral-400 hover:bg-zinc-800 hover:text-white transition-colors"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="rounded-full p-1.5 text-neutral-400 hover:bg-zinc-800 hover:text-white transition-colors"
+              >
+                <X className="h-4 w-4" />
+              </button>
             </div>
 
-            {/* Chat Body & Settings Panels */}
-            <div className="relative flex-1 overflow-hidden bg-[#fafafa]">
-              <AnimatePresence>
-                {showSettings && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    className="absolute inset-x-0 top-0 z-20 bg-white border-b border-neutral-100 p-4 shadow-lg"
+            {/* Message List */}
+            <div className="flex-1 overflow-y-auto bg-[#f9f9f9] p-4">
+              <div className="flex flex-col gap-3">
+                {messages.map(msg => (
+                  <div
+                    key={msg.id}
+                    className={`max-w-[88%] rounded-2xl p-3 text-xs leading-relaxed whitespace-pre-wrap ${
+                      msg.type === 'bot'
+                        ? 'self-start rounded-tl-none border border-neutral-200/70 bg-white text-neutral-800 shadow-sm'
+                        : 'self-end rounded-tr-none bg-zinc-900 text-white shadow-sm'
+                    }`}
                   >
-                    <form onSubmit={handleSaveKey} className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold text-neutral-800 uppercase tracking-wider flex items-center gap-1.5">
-                          <Key className="h-3.5 w-3.5 text-orange-500" />
-                          Gemini API Configuration
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => setShowSettings(false)}
-                          className="text-[10px] font-bold text-neutral-400 hover:text-neutral-600"
-                        >
-                          Cancel
-                        </button>
-                      </div>
-                      <p className="text-[11px] text-neutral-500 leading-normal">
-                        To enable live conversational intelligence, paste your Gemini API Key. Keys are saved securely in your browser's local storage.
-                      </p>
-                      <div className="flex gap-2">
-                        <input
-                          type="password"
-                          placeholder="AIzaSy..."
-                          value={tempApiKey}
-                          onChange={(e) => setTempApiKey(e.target.value)}
-                          className="flex-1 rounded-xl border border-neutral-200 px-3 py-2 text-xs outline-none focus:border-orange-500 bg-neutral-50"
-                        />
-                        <button
-                          type="submit"
-                          className="rounded-xl bg-orange-500 px-3 text-xs font-bold text-white hover:bg-orange-600 transition-colors flex items-center gap-1 shrink-0"
-                        >
-                          {keySaved ? <CheckCircle2 className="h-3.5 w-3.5" /> : "Save"}
-                        </button>
-                      </div>
-                      {apiKey && (
-                        <div className="flex items-center justify-between text-[10px] text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg">
-                          <span>✓ Active API Key configured</span>
-                          <button
-                            type="button"
-                            onClick={() => {
-                              setTempApiKey('');
-                              setApiKey('');
-                              localStorage.removeItem('gemini_api_key');
-                            }}
-                            className="font-bold underline text-neutral-500 hover:text-red-500"
-                          >
-                            Clear
-                          </button>
-                        </div>
-                      )}
-                    </form>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                    {msg.text}
+                  </div>
+                ))}
 
-              {/* Message scroll list */}
-              <div className="h-full overflow-y-auto p-4 pb-20">
-                <div className="flex flex-col gap-3">
-                  {messages.map((msg) => (
-                    <div
-                      key={msg.id}
-                      className={`max-w-[85%] rounded-2xl p-3 text-xs leading-relaxed whitespace-pre-wrap ${
-                        msg.type === 'bot'
-                          ? 'self-start rounded-tl-none border border-neutral-200/60 bg-white text-neutral-800 shadow-sm'
-                          : 'self-end rounded-tr-none bg-zinc-900 text-white shadow-sm'
-                      }`}
-                    >
-                      {msg.text}
-                    </div>
-                  ))}
-
-                  {isLoading && (
-                    <div className="self-start rounded-2xl rounded-tl-none border border-neutral-200/60 bg-white p-3 text-xs text-neutral-400 shadow-sm flex items-center gap-1.5">
-                      <RefreshCw className="h-3 w-3 animate-spin text-orange-500" />
-                      <span>Thinking...</span>
-                    </div>
-                  )}
-
-                  <div ref={messagesEndRef} />
-                </div>
-
-                {/* Quick Action pills (only visible when chat starts/is fresh) */}
-                {messages.length <= 2 && !isLoading && (
-                  <div className="mt-5 flex flex-col gap-2">
-                    <span className="text-[10px] font-black uppercase text-neutral-400 tracking-wider mb-1">Suggested topics</span>
-                    {['Book a Table', 'Workshop Info', 'Menu & Pricing', 'Visit Us'].map((action) => (
-                      <button
-                        key={action}
-                        onClick={() => handleQuickAction(action)}
-                        className="rounded-xl border border-orange-100 bg-orange-50/50 px-3.5 py-2 text-left text-xs font-bold text-orange-800 transition-all hover:bg-orange-100/70 hover:border-orange-200 cursor-pointer"
-                      >
-                        {action}
-                      </button>
-                    ))}
+                {isLoading && (
+                  <div className="self-start rounded-2xl rounded-tl-none border border-neutral-200/70 bg-white px-4 py-3 shadow-sm flex items-center gap-2">
+                    <RefreshCw className="h-3 w-3 animate-spin text-orange-500" />
+                    <span className="text-xs text-neutral-400">Thinking...</span>
                   </div>
                 )}
+                <div ref={messagesEndRef} />
               </div>
+
+              {/* Quick Actions — show when chat is fresh */}
+              {messages.length <= 2 && !isLoading && (
+                <div className="mt-4 flex flex-col gap-2">
+                  <span className="text-[10px] font-black uppercase text-neutral-400 tracking-wider mb-1">Suggested topics</span>
+                  {['Book a Table', 'Workshop Info', 'Menu & Pricing', 'Visit Us'].map(action => (
+                    <button
+                      key={action}
+                      onClick={() => handleSendMessage(action)}
+                      className="w-full rounded-xl border border-orange-100 bg-orange-50/60 px-4 py-2.5 text-left text-xs font-bold text-orange-800 transition-all hover:bg-orange-100 hover:border-orange-200 cursor-pointer"
+                    >
+                      {action}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Input Bar */}
-            <div className="border-t border-neutral-100 bg-white p-3">
+            <div className="border-t border-neutral-100 bg-white p-3 shrink-0">
               <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  handleSendMessage();
-                }}
-                className="flex items-center gap-2 rounded-full border border-neutral-200 bg-neutral-50 px-4 py-2"
+                onSubmit={e => { e.preventDefault(); handleSendMessage(); }}
+                className="flex items-center gap-2 rounded-full border border-neutral-200 bg-neutral-50 px-4 py-2.5"
               >
                 <input
                   type="text"
                   value={inputValue}
-                  onChange={(e) => setInputValue(e.target.value)}
-                  placeholder={apiKey ? "Ask Mixnosh AI anything..." : "Ask offline or add Gemini Key..."}
+                  onChange={e => setInputValue(e.target.value)}
+                  placeholder="Ask me anything about Mixnosh..."
                   className="flex-1 bg-transparent text-xs outline-none placeholder:text-neutral-400 text-neutral-800"
                 />
                 <button
                   type="submit"
                   disabled={!inputValue.trim() || isLoading}
-                  className="text-orange-500 hover:text-orange-600 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                  className="text-orange-500 hover:text-orange-600 disabled:opacity-30 transition-colors"
                 >
                   <Send className="h-4 w-4" />
                 </button>
@@ -420,9 +296,9 @@ Answer the user's questions in a friendly, conversational, and brief manner. Be 
 
       {!isOpen && (
         <button
-          onClick={toggleChat}
-          className="fixed bottom-20 right-4 sm:right-6 z-50 flex h-[48px] w-[48px] sm:h-[52px] sm:w-[52px] items-center justify-center rounded-full bg-gradient-to-r from-orange-500 to-orange-400 text-white shadow-lg transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
-          aria-label="Toggle chat"
+          onClick={() => setIsOpen(true)}
+          className="fixed bottom-20 right-4 sm:right-6 z-50 flex h-[52px] w-[52px] items-center justify-center rounded-full bg-gradient-to-br from-orange-500 to-orange-400 text-white shadow-xl transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+          aria-label="Open chat"
         >
           <MessageCircle className="h-6 w-6" />
         </button>
