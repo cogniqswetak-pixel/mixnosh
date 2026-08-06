@@ -173,6 +173,51 @@
   background: transparent;
 }
 
+/* 3D Page Curl Animation */
+@keyframes pageFlipNext {
+  0% {
+    transform: rotateY(0deg);
+    transform-origin: left center;
+    box-shadow: -10px 0 25px rgba(0, 0, 0, 0.15);
+  }
+  50% {
+    transform: rotateY(-90deg) scale(0.98);
+    transform-origin: left center;
+    box-shadow: -25px 0 45px rgba(0, 0, 0, 0.35);
+  }
+  100% {
+    transform: rotateY(-180deg);
+    transform-origin: left center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  }
+}
+
+@keyframes pageFlipPrev {
+  0% {
+    transform: rotateY(0deg);
+    transform-origin: right center;
+    box-shadow: 10px 0 25px rgba(0, 0, 0, 0.15);
+  }
+  50% {
+    transform: rotateY(90deg) scale(0.98);
+    transform-origin: right center;
+    box-shadow: 25px 0 45px rgba(0, 0, 0, 0.35);
+  }
+  100% {
+    transform: rotateY(180deg);
+    transform-origin: right center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  }
+}
+
+.animate-page-flip-next {
+  animation: pageFlipNext 0.75s cubic-bezier(0.645, 0.045, 0.355, 1) forwards;
+}
+
+.animate-page-flip-prev {
+  animation: pageFlipPrev 0.75s cubic-bezier(0.645, 0.045, 0.355, 1) forwards;
+}
+
 html, body {
   -ms-overflow-style: none;  /* IE and Edge */
   scrollbar-width: none;  /* Firefox */
