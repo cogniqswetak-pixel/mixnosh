@@ -161,6 +161,15 @@ Answer the user's questions in a friendly, conversational, and relatively brief 
       });
 
       if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error("401 Unauthorized. The API key or token is invalid or expired. If you're using Google AI Studio, please ensure your key starts with 'AIzaSy' and is pasted correctly.");
+        }
+        if (response.status === 403) {
+          throw new Error("403 Forbidden. This key is restricted or the Gemini API is not available in your region/country.");
+        }
+        if (response.status === 404) {
+          throw new Error("404 Model Not Found. The selected model is not supported or accessible on this key tier.");
+        }
         throw new Error(`API Error: ${response.status} ${response.statusText}`);
       }
 
@@ -172,7 +181,7 @@ Answer the user's questions in a friendly, conversational, and relatively brief 
       return "I couldn't process that response. Please try again!";
     } catch (err) {
       console.error(err);
-      return `⚠️ Gemini API Error: ${err.message || 'Unable to fetch response'}. Please verify your API Key.`;
+      return `⚠️ Gemini API Error:\n${err.message || 'Unable to fetch response'}\n\n👉 You can obtain a free, valid Gemini API Key by visiting: https://aistudio.google.com/`;
     }
   };
 
