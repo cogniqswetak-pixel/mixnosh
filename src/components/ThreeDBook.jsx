@@ -93,29 +93,6 @@ export default function ThreeDBook({ pages, activeLocation, onOpenBooking }) {
       {/* ── REALISTIC 3D HARDCOVER BOOK CASING ── */}
       <div className="relative">
 
-        {/* ── GOLDEN SATIN RIBBON — hangs below the book from the spine center ── */}
-        <div
-          className="absolute bottom-0 left-1/2 -translate-x-1/2 z-50 pointer-events-none"
-          style={{ transform: "translateX(-50%) translateY(100%)" }}
-        >
-          {/* Ribbon body with satin sheen */}
-          <div style={{
-            width: "14px",
-            height: "44px",
-            background: "linear-gradient(to right, #b45309 0%, #fbbf24 20%, #fef3c7 45%, #fbbf24 55%, #f59e0b 75%, #b45309 100%)",
-            boxShadow: "2px 0 6px rgba(0,0,0,0.30), -1px 0 4px rgba(0,0,0,0.15), inset 1px 0 3px rgba(255,255,255,0.25)",
-          }} />
-          {/* V-cut tapered tail */}
-          <div style={{
-            width: 0,
-            height: 0,
-            borderLeft: "7px solid transparent",
-            borderRight: "7px solid transparent",
-            borderTop: "9px solid #d97706",
-            filter: "drop-shadow(0 3px 4px rgba(0,0,0,0.25))",
-          }} />
-        </div>
-
         <div
           className="relative mx-auto rounded-2xl bg-[#1e1410] border-2 border-[#3d2e24] transition-all duration-500"
           style={{
@@ -434,7 +411,6 @@ export default function ThreeDBook({ pages, activeLocation, onOpenBooking }) {
           </button>
 
           <span className="text-[10px] text-amber-700/70 font-semibold tracking-widest hidden sm:inline">
-            ✦ Hardcover Leather Menu ✦
           </span>
 
           <button
