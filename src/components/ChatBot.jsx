@@ -162,7 +162,7 @@ Answer the user's questions in a friendly, conversational, and relatively brief 
 
       if (!response.ok) {
         if (response.status === 401) {
-          throw new Error("401 Unauthorized. The API key or token is invalid or expired. If you're using Google AI Studio, please ensure your key starts with 'AIzaSy' and is pasted correctly.");
+          throw new Error("401 Unauthorized. The API key or token is invalid, un-authorized, or has expired. Note: Google Cloud Access Tokens ('AQ.Ab8...') are temporary credentials that automatically expire after 60 minutes.");
         }
         if (response.status === 403) {
           throw new Error("403 Forbidden. This key is restricted or the Gemini API is not available in your region/country.");
