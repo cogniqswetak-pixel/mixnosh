@@ -82,7 +82,7 @@ export default function ThreeDBook({ pages, activeLocation, onOpenBooking }) {
           <button
             onClick={handleNext}
             disabled={currentPage === totalPages - 1 || isFlipping}
-            className="w-9 h-9 rounded-full bg-white border border-orange-200 text-neutral-800 flex items-center justify-center hover:bg-orange-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all shadow-sm cursor-pointer"
+            className={`w-9 h-9 rounded-full bg-white border border-orange-200 text-neutral-800 flex items-center justify-center hover:bg-orange-50 disabled:opacity-40 transition-all shadow-sm cursor-pointer`}
             aria-label="Next Page"
           >
             <ChevronRight className="w-5 h-5" />
@@ -404,7 +404,7 @@ export default function ThreeDBook({ pages, activeLocation, onOpenBooking }) {
           <button
             onClick={handlePrev}
             disabled={currentPage === 0 || isFlipping}
-            className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#1e1410] border border-amber-800/40 text-amber-300/80 text-xs font-bold uppercase tracking-wider hover:bg-amber-900/40 hover:text-amber-200 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-md cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#1e1410] border border-amber-800/40 text-amber-300/80 text-xs font-bold uppercase tracking-wider hover:bg-amber-900/40 hover:text-amber-200 disabled:opacity-30 transition-all shadow-md cursor-pointer"
           >
             <ChevronLeft className="w-4 h-4" />
             Prev
@@ -416,7 +416,7 @@ export default function ThreeDBook({ pages, activeLocation, onOpenBooking }) {
           <button
             onClick={handleNext}
             disabled={currentPage === totalPages - 1 || isFlipping}
-            className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#1e1410] border border-amber-800/40 text-amber-300/80 text-xs font-bold uppercase tracking-wider hover:bg-amber-900/40 hover:text-amber-200 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-md cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#1e1410] border border-amber-800/40 text-amber-300/80 text-xs font-bold uppercase tracking-wider hover:bg-amber-900/40 hover:text-amber-200 disabled:opacity-30 transition-all shadow-md cursor-pointer"
           >
             Next
             <ChevronRight className="w-4 h-4" />
