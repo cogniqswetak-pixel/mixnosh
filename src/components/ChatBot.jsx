@@ -388,13 +388,15 @@ Answer the user's questions in a friendly, conversational, and relatively brief 
         )}
       </AnimatePresence>
 
-      <button
-        onClick={toggleChat}
-        className="fixed bottom-20 right-4 sm:right-6 z-50 flex h-[48px] w-[48px] sm:h-[52px] sm:w-[52px] items-center justify-center rounded-full bg-gradient-to-r from-orange-500 to-orange-400 text-white shadow-lg transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
-        aria-label="Toggle chat"
-      >
-        {isOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
-      </button>
+      {!isOpen && (
+        <button
+          onClick={toggleChat}
+          className="fixed bottom-20 right-4 sm:right-6 z-50 flex h-[48px] w-[48px] sm:h-[52px] sm:w-[52px] items-center justify-center rounded-full bg-gradient-to-r from-orange-500 to-orange-400 text-white shadow-lg transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2"
+          aria-label="Toggle chat"
+        >
+          <MessageCircle className="h-6 w-6" />
+        </button>
+      )}
     </>
   );
 };
