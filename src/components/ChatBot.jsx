@@ -65,8 +65,8 @@ const ChatBot = ({ onOpenBooking }) => {
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const [apiKey, setApiKey] = useState(() => localStorage.getItem('gemini_api_key') || '');
-  const [tempApiKey, setTempApiKey] = useState(apiKey);
+  const [apiKey, setApiKey] = useState(() => localStorage.getItem('gemini_api_key') || import.meta.env.VITE_GEMINI_API_KEY || '');
+  const [tempApiKey, setTempApiKey] = useState(() => localStorage.getItem('gemini_api_key') || import.meta.env.VITE_GEMINI_API_KEY || '');
   const [keySaved, setKeySaved] = useState(false);
 
   const messagesEndRef = useRef(null);
