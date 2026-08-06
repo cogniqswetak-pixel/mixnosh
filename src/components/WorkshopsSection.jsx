@@ -6,10 +6,8 @@ import {
   Sparkles,
   ArrowRight,
   UserCheck,
-  ShieldCheck,
-  CheckCircle2,
 } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 export const WORKSHOPS_DATA = [
   {
@@ -25,7 +23,10 @@ export const WORKSHOPS_DATA = [
     locations: ["Mixnosh Jayanagar", "Mixnosh HSR Layout"],
     date: "Upcoming Weekend Slots",
     image: "https://admin.mixnosh.in/sneakerandresinart/IMG-20250318-WA0032.jpg",
-    gallery: ["https://admin.mixnosh.in/sneakerandresinart/IMG-20250318-WA0032.jpg", "https://admin.mixnosh.in/sneakerandresinart/IMG-20250318-WA0034.jpg"],
+    gallery: [
+      "https://admin.mixnosh.in/sneakerandresinart/IMG-20250318-WA0032.jpg",
+      "https://admin.mixnosh.in/sneakerandresinart/IMG-20250318-WA0034.jpg",
+    ],
     description:
       "Turn a plain pair into wearable art! Learn sneaker painting techniques, customize your own kicks, and take home a one-of-a-kind design. Led by our team of talented artists for an inclusive, extraordinary experience.",
     inclusions: [
@@ -64,9 +65,12 @@ export const WORKSHOPS_DATA = [
     locations: ["Mixnosh HSR Layout", "Mixnosh Jayanagar"],
     date: "Upcoming Weekend Slots",
     image: "https://admin.mixnosh.in/sneakerandresinart/Untitled-5.jpg",
-    gallery: ["https://admin.mixnosh.in/sneakerandresinart/Untitled-5.jpg", "https://admin.mixnosh.in/artfulmoments/resin-art-workshop-bangalore.jpg"],
+    gallery: [
+      "https://admin.mixnosh.in/sneakerandresinart/Untitled-5.jpg",
+      "https://admin.mixnosh.in/artfulmoments/resin-art-workshop-bangalore.jpg",
+    ],
     description:
-      "Pour, swirl, and create stunning epoxy resin coasters, wall art, clocks, or ocean lamps at Bengaluru’s most aesthetic resin art cafe. Perfect for beginners to craft a high-end luxury decor piece.",
+      "Pour, swirl, and create stunning epoxy resin coasters, wall art, clocks, or ocean lamps at Bengaluru's most aesthetic resin art cafe. Perfect for beginners to craft a high-end luxury decor piece.",
     inclusions: [
       "Choice of Ocean Lamp, Clock, Wall Art, or Coaster board base",
       "High-clarity non-toxic epoxy resin & vibrant pigments",
@@ -129,7 +133,9 @@ export const WORKSHOPS_DATA = [
     locations: ["Mixnosh HSR Layout", "Mixnosh Jayanagar"],
     date: "Daily Walk-Ins & Bookings",
     image: "https://admin.mixnosh.in/sneakerandresinart/IMG-20250318-WA0034.jpg",
-    gallery: ["https://admin.mixnosh.in/sneakerandresinart/IMG-20250318-WA0034.jpg"],
+    gallery: [
+      "https://admin.mixnosh.in/sneakerandresinart/IMG-20250318-WA0034.jpg",
+    ],
     description:
       "Transform canvas tote bags or caps into personalized everyday accessories with washable fabric paints, anime stencils, and pop-art motifs.",
     inclusions: [
@@ -147,40 +153,27 @@ export const WORKSHOPS_DATA = [
   },
 ];
 
+const categories = [
+  "All",
+  "Sneaker Customization",
+  "Epoxy Resin Art",
+  "Mixed Media Art",
+  "Fabric Customization",
+];
+
 export default function WorkshopsSection({ onSelectWorkshop, onOpenBooking }) {
   const [selectedFilter, setSelectedFilter] = useState("All");
-
-  const categories = [
-    "All",
-    "Sneaker Customization",
-    "Epoxy Resin Art",
-    "Mixed Media Art",
-    "Fabric Customization",
-  ];
 
   const filteredWorkshops =
     selectedFilter === "All"
       ? WORKSHOPS_DATA
       : WORKSHOPS_DATA.filter((w) => w.category === selectedFilter);
 
-  const containerVariants = {
-    hidden: {},
-    visible: { transition: { staggerChildren: 0.1 } },
-  };
-
-  const cardVariants = {
-    hidden: { opacity: 0, y: 30 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5, ease: "easeOut" },
-    },
-  };
-
   return (
     <section id="workshops" className="py-16 lg:py-24 bg-transparent text-neutral-900">
       <div className="max-w-7xl mx-auto px-4 lg:px-8">
-        {/* Section Header */}
+
+        {/* ── Section Header ── */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -190,8 +183,7 @@ export default function WorkshopsSection({ onSelectWorkshop, onOpenBooking }) {
         >
           <div className="max-w-2xl">
             <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-orange-50 border border-orange-200/80 text-orange-600 rounded-full font-bold text-xs uppercase tracking-wider mb-3">
-              <Sparkles className="w-3.5 h-3.5 text-amber-500" /> Discover Your
-              Inner Artist
+              <Sparkles className="w-3.5 h-3.5 text-amber-500" /> Discover Your Inner Artist
             </span>
             <h2 className="font-heading font-black text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-neutral-900 tracking-tighter uppercase">
               HANDS-ON{" "}
@@ -200,8 +192,7 @@ export default function WorkshopsSection({ onSelectWorkshop, onOpenBooking }) {
               </span>
             </h2>
             <p className="text-neutral-600 text-base md:text-lg mt-3">
-              Learn, paint, and create your custom artwork with all materials
-              included and step-by-step guidance from expert artists.
+              Learn, paint, and create your custom artwork with all materials included and step-by-step guidance from expert artists.
             </p>
           </div>
 
@@ -214,123 +205,140 @@ export default function WorkshopsSection({ onSelectWorkshop, onOpenBooking }) {
           </button>
         </motion.div>
 
-        {/* Filter Pills */}
+        {/* ── Filter Pills ── */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
           className="flex flex-wrap items-center gap-2 mb-10"
         >
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setSelectedFilter(cat)}
-              className={`px-4 py-2 rounded-full text-xs font-bold transition-all cursor-pointer ${
-                selectedFilter === cat
-                  ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md shadow-orange-500/20"
-                  : "bg-white text-neutral-600 hover:bg-orange-50 hover:text-neutral-900 border border-orange-200/80"
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+          {categories.map((cat) => {
+            const isActive = selectedFilter === cat;
+            return (
+              <button
+                key={cat}
+                onClick={() => setSelectedFilter(cat)}
+                className="relative px-4 py-2 rounded-full text-xs font-bold transition-colors duration-200 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-orange-400"
+                style={{ WebkitTapHighlightColor: "transparent" }}
+              >
+                {/* Animated background pill */}
+                {isActive && (
+                  <motion.span
+                    layoutId="workshop-filter-pill"
+                    className="absolute inset-0 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 shadow-md shadow-orange-500/30"
+                    transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                  />
+                )}
+                {/* Label */}
+                <span
+                  className={`relative z-10 transition-colors duration-200 ${
+                    isActive ? "text-white" : "text-neutral-600 hover:text-neutral-900"
+                  }`}
+                >
+                  {cat}
+                </span>
+                {/* Border for inactive */}
+                {!isActive && (
+                  <span className="absolute inset-0 rounded-full border border-orange-200/80 bg-white hover:bg-orange-50 transition-colors duration-200" />
+                )}
+              </button>
+            );
+          })}
         </motion.div>
 
-        {/* Workshop Grid */}
+        {/* ── Workshop Grid with AnimatePresence ── */}
         <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
+          layout
           className="grid grid-cols-1 md:grid-cols-2 gap-8"
         >
-          {filteredWorkshops.map((item) => (
-            <motion.div
-              variants={cardVariants}
-              key={item.id}
-              className="glass-panel p-5 sm:p-6 rounded-3xl flex flex-col justify-between text-left group border border-white/80"
-            >
-              <div>
-                {/* Image Container with Badges */}
-                <div className="relative h-64 sm:h-72 rounded-2xl overflow-hidden mb-6 shadow-md">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-full h-full object-cover object-[center_20%] group-hover:scale-105 transition-transform duration-700"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/85 via-neutral-950/20 to-transparent" />
+          <AnimatePresence mode="popLayout">
+            {filteredWorkshops.map((item) => (
+              <motion.div
+                key={item.id}
+                layout
+                initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.92, y: -10 }}
+                transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                className="glass-panel p-5 sm:p-6 rounded-3xl flex flex-col justify-between text-left group border border-white/80"
+              >
+                <div>
+                  {/* Image */}
+                  <div className="relative h-64 sm:h-72 rounded-2xl overflow-hidden mb-6 shadow-md">
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      className="w-full h-full object-cover object-[center_20%] group-hover:scale-105 transition-transform duration-700"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/85 via-neutral-950/20 to-transparent" />
 
-                  {/* Category Pill */}
-                  <div className="absolute top-4 left-4 flex flex-wrap gap-2">
-                    <span className="px-3 py-1 bg-white/90 border border-orange-200 text-orange-600 text-xs font-extrabold rounded-full backdrop-blur-md uppercase tracking-wider shadow-sm">
-                      {item.category}
-                    </span>
-                  </div>
-
-                  {/* Price Tag Badge */}
-                  <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white">
-                    <span className="font-heading font-black text-2xl sm:text-3xl text-white drop-shadow-md">
-                      {item.price}
-                    </span>
-                    <span className="flex items-center gap-1.5 text-xs font-bold bg-white/90 text-neutral-800 border border-orange-200 px-3 py-1.5 rounded-full backdrop-blur-md shadow-sm">
-                      <Clock className="w-3.5 h-3.5 text-amber-500" />{" "}
-                      {item.duration}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Info Body */}
-                <div className="space-y-3">
-                  <h3 className="font-heading font-bold text-2xl text-neutral-900 group-hover:text-orange-600 transition-colors uppercase tracking-tight">
-                    {item.title}
-                  </h3>
-
-                  <p className="text-neutral-600 text-sm leading-relaxed line-clamp-3">
-                    {item.description}
-                  </p>
-
-                  <div className="space-y-2 pt-4 text-xs text-neutral-700 font-medium border-t border-orange-200/50">
-                    <div className="flex items-center gap-2">
-                      <UserCheck className="w-4 h-4 text-orange-500 shrink-0" />
-                      <span>
-                        <strong className="text-neutral-900">
-                          Instructor:
-                        </strong>{" "}
-                        {item.instructor}
+                    {/* Category Pill */}
+                    <div className="absolute top-4 left-4">
+                      <span className="px-3 py-1 bg-white/90 border border-orange-200 text-orange-600 text-xs font-extrabold rounded-full backdrop-blur-md uppercase tracking-wider shadow-sm">
+                        {item.category}
                       </span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <MapPin className="w-4 h-4 text-orange-500 shrink-0" />
-                      <span>
-                        <strong className="text-neutral-900">Venues:</strong>{" "}
-                        {item.locations.join(" • ")}
+
+                    {/* Price & Duration */}
+                    <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-white">
+                      <span className="font-heading font-black text-2xl sm:text-3xl text-white drop-shadow-md">
+                        {item.price}
+                      </span>
+                      <span className="flex items-center gap-1.5 text-xs font-bold bg-white/90 text-neutral-800 border border-orange-200 px-3 py-1.5 rounded-full backdrop-blur-md shadow-sm">
+                        <Clock className="w-3.5 h-3.5 text-amber-500" /> {item.duration}
                       </span>
                     </div>
                   </div>
+
+                  {/* Info Body */}
+                  <div className="space-y-3">
+                    <h3 className="font-heading font-bold text-2xl text-neutral-900 group-hover:text-orange-600 transition-colors uppercase tracking-tight">
+                      {item.title}
+                    </h3>
+                    <p className="text-neutral-600 text-sm leading-relaxed line-clamp-3">
+                      {item.description}
+                    </p>
+
+                    <div className="space-y-2 pt-4 text-xs text-neutral-700 font-medium border-t border-orange-200/50">
+                      <div className="flex items-center gap-2">
+                        <UserCheck className="w-4 h-4 text-orange-500 shrink-0" />
+                        <span>
+                          <strong className="text-neutral-900">Instructor:</strong>{" "}
+                          {item.instructor}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <MapPin className="w-4 h-4 text-orange-500 shrink-0" />
+                        <span>
+                          <strong className="text-neutral-900">Venues:</strong>{" "}
+                          {item.locations.join(" • ")}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
 
-              {/* Action Buttons */}
-              <div className="grid grid-cols-2 gap-3 pt-6">
-                <button
-                  onClick={() => onSelectWorkshop(item)}
-                  className="py-3 px-4 rounded-xl text-xs font-bold border border-orange-300/80 bg-white text-neutral-700 hover:bg-orange-50 hover:text-neutral-900 transition-all text-center cursor-pointer uppercase tracking-wider"
-                >
-                  View Details
-                </button>
-
-                <button
-                  onClick={() => onOpenBooking("workshop", item.title)}
-                  className="py-3 px-4 rounded-xl text-xs font-bold bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:from-orange-600 hover:to-amber-600 transition-all flex items-center justify-center gap-1.5 cursor-pointer uppercase tracking-wider shadow-sm"
-                >
-                  Book Slot <ArrowRight className="w-4 h-4 text-amber-200" />
-                </button>
-              </div>
-            </motion.div>
-          ))}
+                {/* Action Buttons */}
+                <div className="grid grid-cols-2 gap-3 pt-6">
+                  <button
+                    onClick={() => onSelectWorkshop(item)}
+                    className="py-3 px-4 rounded-xl text-xs font-bold border border-orange-300/80 bg-white text-neutral-700 hover:bg-orange-50 hover:text-neutral-900 transition-all text-center cursor-pointer uppercase tracking-wider"
+                  >
+                    View Details
+                  </button>
+                  <button
+                    onClick={() => onOpenBooking("workshop", item.title)}
+                    className="py-3 px-4 rounded-xl text-xs font-bold bg-gradient-to-r from-orange-500 to-amber-500 text-white hover:from-orange-600 hover:to-amber-600 transition-all flex items-center justify-center gap-1.5 cursor-pointer uppercase tracking-wider shadow-sm"
+                  >
+                    Book Slot <ArrowRight className="w-4 h-4 text-amber-200" />
+                  </button>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </motion.div>
       </div>
     </section>
   );
 }
-

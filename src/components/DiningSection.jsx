@@ -236,16 +236,13 @@ function FlipMenuCard({ item, idx, onOpenBooking }) {
           </div>
 
           <div className="pt-3 border-t border-orange-100 flex items-center justify-between">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onOpenBooking("table");
-              }}
-              className="px-5 py-2.5 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-600 hover:to-amber-600 text-white font-heading font-black text-xs uppercase tracking-wider shadow-md hover:scale-105 transition-all cursor-pointer"
-            >
-              Reserve Table
-            </button>
-
+            <span className="flex items-center gap-1.5 text-[11px] font-black text-neutral-500 uppercase tracking-wider">
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+              Freshly Made Daily
+            </span>
+            <span className="text-[11px] font-black text-orange-600 uppercase tracking-wider">
+              HSR &amp; Jayanagar
+            </span>
           </div>
         </div>
       </div>
