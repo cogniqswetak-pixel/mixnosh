@@ -90,42 +90,53 @@ export default function ThreeDBook({ pages, activeLocation, onOpenBooking }) {
         </div>
       </div>
 
-      {/* ── HARDCOVER 3D LEATHER BOOK FRAME ── */}
-      <div
-        className="relative mx-auto rounded-3xl p-3 sm:p-6 md:p-8 bg-gradient-to-b from-[#2a1b14] via-[#1c120d] to-[#120b08] border-4 border-[#3d271d] shadow-[0_25px_60px_rgba(0,0,0,0.45)] transition-all duration-500"
-        style={{ perspective: "1800px" }}
-      >
-        {/* Leather Grain Overlay Texture */}
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-amber-500/5 via-transparent to-black/40 pointer-events-none" />
+      {/* ── REALISTIC OPEN JOURNAL COVER & PAPER CONTAINER ── */}
+      <div className="relative mx-auto rounded-3xl p-3 sm:p-5 md:p-6 bg-[#1a1816] border-2 border-[#36302a] shadow-[0_30px_70px_rgba(0,0,0,0.35)] transition-all duration-500">
+        
+        {/* Soft Ambient Table Surface Glow */}
+        <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-amber-500/5 via-transparent to-black/50 pointer-events-none" />
 
-        {/* Embossed Corner Decorations */}
-        <div className="absolute top-3 left-3 w-8 h-8 border-t-2 border-l-2 border-amber-500/30 rounded-tl-xl pointer-events-none" />
-        <div className="absolute top-3 right-3 w-8 h-8 border-t-2 border-r-2 border-amber-500/30 rounded-tr-xl pointer-events-none" />
-        <div className="absolute bottom-3 left-3 w-8 h-8 border-b-2 border-l-2 border-amber-500/30 rounded-bl-xl pointer-events-none" />
-        <div className="absolute bottom-3 right-3 w-8 h-8 border-b-2 border-r-2 border-amber-500/30 rounded-br-xl pointer-events-none" />
+        {/* Golden Satin Ribbon Bookmark Hanging From Bottom Spine */}
+        <div className="absolute bottom-[-24px] left-1/2 -translate-x-1/2 z-40 w-4 h-12 bg-gradient-to-b from-amber-400 via-amber-500 to-amber-600 rounded-b-md shadow-lg border-x border-amber-300/40 pointer-events-none" />
 
-        {/* ── OPEN BOOK SPREAD (CONTAINER FOR STACK & FLIPPING SHEET) ── */}
+        {/* ── OPEN CREAME-COLORED JOURNAL SPREAD ── */}
         <div
-          className="relative rounded-2xl bg-[#faf6ee] border border-[#e8ded0] shadow-2xl min-h-[480px] sm:min-h-[520px] overflow-hidden"
-          style={{ transformStyle: "preserve-3d" }}
+          className="relative rounded-2xl bg-[#faf6ee] shadow-[0_15px_35px_rgba(0,0,0,0.25)] min-h-[490px] sm:min-h-[530px] flex overflow-visible"
+          style={{ perspective: "1800px", transformStyle: "preserve-3d" }}
         >
-          {/* Stacked Paper Edge Effect */}
-          <div className="absolute top-0 bottom-0 left-0 w-2.5 bg-gradient-to-r from-[#d9cfbe] via-[#ebdcc7] to-transparent z-20 pointer-events-none border-r border-[#d4c6b1]" />
-          <div className="absolute top-0 bottom-0 right-0 w-2.5 bg-gradient-to-l from-[#d9cfbe] via-[#ebdcc7] to-transparent z-20 pointer-events-none border-l border-[#d4c6b1]" />
 
-          {/* Spine Center Crease */}
-          <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-8 sm:w-12 bg-gradient-to-r from-black/25 via-black/10 to-black/25 z-30 pointer-events-none flex items-center justify-center">
-            <div className="w-0.5 h-full bg-[#c9bba6]/60 shadow-sm" />
+          {/* RIGHT SIDE STACKED PAGE BLOCK (REAL PHYSICAL PAPER THICKNESS) */}
+          <div
+            className="absolute top-1 bottom-1 right-[-14px] w-3.5 rounded-r-sm z-10 pointer-events-none shadow-md"
+            style={{
+              background: "repeating-linear-gradient(to bottom, #d6caa7, #d6caa7 2px, #f5efe2 2px, #f5efe2 5px)",
+              boxShadow: "inset 2px 0 4px rgba(0,0,0,0.15), 3px 0 6px rgba(0,0,0,0.1)",
+            }}
+          />
+
+          {/* LEFT SIDE STACKED PAGE BLOCK */}
+          <div
+            className="absolute top-1 bottom-1 left-[-14px] w-3.5 rounded-l-sm z-10 pointer-events-none shadow-md"
+            style={{
+              background: "repeating-linear-gradient(to bottom, #d6caa7, #d6caa7 2px, #f5efe2 2px, #f5efe2 5px)",
+              boxShadow: "inset -2px 0 4px rgba(0,0,0,0.15), -3px 0 6px rgba(0,0,0,0.1)",
+            }}
+          />
+
+          {/* Center Spine Crease Line */}
+          <div className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-6 sm:w-8 bg-gradient-to-r from-black/20 via-black/5 to-black/20 z-30 pointer-events-none flex items-center justify-center">
+            <div className="w-0.5 h-full bg-[#d6c7b0]" />
           </div>
 
-          {/* ── BASE SPREAD (UNDERNEATH) ── */}
-          <div className="relative w-full h-full min-h-[480px] sm:min-h-[520px] grid grid-cols-1 md:grid-cols-2">
+          {/* ── MAIN SPREAD GRID ── */}
+          <div className="relative w-full h-full min-h-[490px] sm:min-h-[530px] grid grid-cols-1 md:grid-cols-2 rounded-2xl overflow-hidden">
             
-            {/* LEFT BASE PAGE */}
+            {/* LEFT PAGE */}
             <div
-              className="p-6 sm:p-8 md:p-10 flex flex-col justify-between border-b md:border-b-0 md:border-r border-[#e3d8c5]"
+              className="p-6 sm:p-8 md:p-10 flex flex-col justify-between border-b md:border-b-0 md:border-r border-[#e3d8c5] relative"
               style={{
-                background: "linear-gradient(to right, #f6f0e4 0%, #faf6ee 12%, #faf6ee 90%, #eee4d2 100%)",
+                background: "linear-gradient(to right, #f2ebd9 0%, #faf6ee 10%, #faf6ee 90%, #e5dbc7 100%)",
+                boxShadow: "inset 6px 0 18px rgba(0,0,0,0.03)",
               }}
             >
               <div>
@@ -177,11 +188,12 @@ export default function ThreeDBook({ pages, activeLocation, onOpenBooking }) {
               </div>
             </div>
 
-            {/* RIGHT BASE PAGE */}
+            {/* RIGHT PAGE */}
             <div
-              className="p-6 sm:p-8 md:p-10 flex flex-col justify-between"
+              className="p-6 sm:p-8 md:p-10 flex flex-col justify-between relative"
               style={{
-                background: "linear-gradient(to left, #f6f0e4 0%, #faf6ee 12%, #faf6ee 90%, #eee4d2 100%)",
+                background: "linear-gradient(to left, #f2ebd9 0%, #faf6ee 10%, #faf6ee 90%, #e5dbc7 100%)",
+                boxShadow: "inset -6px 0 18px rgba(0,0,0,0.03)",
               }}
             >
               <div>
@@ -234,7 +246,7 @@ export default function ThreeDBook({ pages, activeLocation, onOpenBooking }) {
             </div>
           </div>
 
-          {/* ── REAL PHYSICAL 3D PAGE SHEET THAT TURNS OVER (1-BY-1 FLIP) ── */}
+          {/* ── PHYSICAL 3D PAGE SHEET THAT FLIPS OVER (1-BY-1 FLIP) ── */}
           {isFlipping && (
             <div
               className={`absolute top-0 bottom-0 right-0 w-1/2 z-40 ${
@@ -245,12 +257,12 @@ export default function ThreeDBook({ pages, activeLocation, onOpenBooking }) {
                 transformOrigin: "left center",
               }}
             >
-              {/* FRONT FACE OF FLIPPING SHEET (Right Page Content) */}
+              {/* FRONT FACE OF FLIPPING SHEET */}
               <div
-                className="absolute inset-0 p-6 sm:p-8 md:p-10 flex flex-col justify-between border-l border-[#e3d8c5] shadow-xl"
+                className="absolute inset-0 p-6 sm:p-8 md:p-10 flex flex-col justify-between border-l border-[#e3d8c5] shadow-2xl"
                 style={{
                   backfaceVisibility: "hidden",
-                  background: "linear-gradient(to left, #f6f0e4 0%, #faf6ee 12%, #faf6ee 90%, #eee4d2 100%)",
+                  background: "linear-gradient(to left, #f2ebd9 0%, #faf6ee 10%, #faf6ee 90%, #e5dbc7 100%)",
                 }}
               >
                 <div>
@@ -280,17 +292,17 @@ export default function ThreeDBook({ pages, activeLocation, onOpenBooking }) {
                     ))}
                   </div>
                 </div>
-                {/* Dynamic Lighting & Shadow Sweep on Front Face */}
+                {/* Dynamic Lighting & Page Shadow Sweep */}
                 <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/10 pointer-events-none" />
               </div>
 
-              {/* BACK FACE OF FLIPPING SHEET (Next Left Page Content) */}
+              {/* BACK FACE OF FLIPPING SHEET */}
               <div
-                className="absolute inset-0 p-6 sm:p-8 md:p-10 flex flex-col justify-between border-r border-[#e3d8c5] shadow-xl"
+                className="absolute inset-0 p-6 sm:p-8 md:p-10 flex flex-col justify-between border-r border-[#e3d8c5] shadow-2xl"
                 style={{
                   backfaceVisibility: "hidden",
                   transform: "rotateY(180deg)",
-                  background: "linear-gradient(to right, #f6f0e4 0%, #faf6ee 12%, #faf6ee 90%, #eee4d2 100%)",
+                  background: "linear-gradient(to right, #f2ebd9 0%, #faf6ee 10%, #faf6ee 90%, #e5dbc7 100%)",
                 }}
               >
                 <div>
@@ -320,7 +332,7 @@ export default function ThreeDBook({ pages, activeLocation, onOpenBooking }) {
                     ))}
                   </div>
                 </div>
-                {/* Dynamic Lighting & Shadow Sweep on Back Face */}
+                {/* Dynamic Lighting & Page Shadow Sweep */}
                 <div className="absolute inset-0 bg-gradient-to-l from-black/30 via-transparent to-black/10 pointer-events-none" />
               </div>
             </div>
@@ -328,7 +340,7 @@ export default function ThreeDBook({ pages, activeLocation, onOpenBooking }) {
         </div>
 
         {/* ── BOTTOM CONTROLS ── */}
-        <div className="mt-4 flex items-center justify-between text-xs text-amber-200/80 font-bold uppercase tracking-wider px-2">
+        <div className="mt-5 flex items-center justify-between text-xs text-amber-200/80 font-bold uppercase tracking-wider px-2">
           <button
             onClick={handlePrev}
             disabled={currentPage === 0 || isFlipping}
@@ -338,7 +350,7 @@ export default function ThreeDBook({ pages, activeLocation, onOpenBooking }) {
           </button>
 
           <span className="text-[10px] text-amber-300/60 font-semibold tracking-widest hidden sm:inline">
-            ✦ Hardcover Leather Menu Book ✦
+            ✦ Hardcover Leather Menu Journal ✦
           </span>
 
           <button
