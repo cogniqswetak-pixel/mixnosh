@@ -14,17 +14,18 @@ export default function Navbar({
   );
 
   const navItems = [
-    { id: "dine", label: "Dine & Unwind", view: "home", target: "dine" },
-    { id: "arts", label: "Art & Events", view: "home", target: "arts" },
+    { id: "dine", label: "Dine & Unwind", view: "home", target: "dine", icon: "🍽️" },
+    { id: "arts", label: "Art & Events", view: "home", target: "arts", icon: "🎨" },
     {
       id: "customresinsneakers",
       label: "Custom Sneaker & Resin",
       view: "home",
       target: "customresinsneakers",
       badge: "Popular",
+      icon: "👟",
     },
-    { id: "workshops", label: "Cafe Programs", view: "home", target: "workshops" },
-    { id: "bookclub", label: "Book Club", view: "home", target: "bookclub" },
+    { id: "workshops", label: "Cafe Programs", view: "home", target: "workshops", icon: "✨" },
+    { id: "bookclub", label: "Book Club", view: "home", target: "bookclub", icon: "📚" },
   ];
 
   const handleNavClick = (view, elementId, tabId) => {
@@ -51,7 +52,7 @@ export default function Navbar({
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="relative bg-white/90 backdrop-blur-2xl border-2 border-white/90 rounded-full px-4 sm:px-6 py-2 sm:py-2.5 shadow-[0_8px_32px_rgba(0,0,0,0.12)] ring-1 ring-orange-500/10"
+          className="relative bg-white/90 backdrop-blur-2xl border-2 border-white/90 rounded-2xl lg:rounded-full px-4 sm:px-6 py-2 sm:py-2.5 shadow-[0_8px_32px_rgba(0,0,0,0.12)] ring-1 ring-orange-500/10"
         >
           <div className="flex items-center justify-between gap-3 sm:gap-6">
             {/* Logo */}
@@ -65,7 +66,7 @@ export default function Navbar({
               <img
                 src="https://mixnosh.in/newmix/assets/img/logo.svg"
                 alt="Mixnosh Art Cafe Logo"
-                className="h-9 sm:h-11.5 w-auto object-contain transition-all duration-300 relative z-10"
+                className="h-8 sm:h-11.5 w-auto object-contain transition-all duration-300 relative z-10"
               />
             </motion.button>
 
@@ -184,24 +185,25 @@ export default function Navbar({
                 animate={{ opacity: 1, height: "auto" }}
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                className="lg:hidden mt-3 pt-3 border-t-2 border-orange-100 flex flex-col gap-2 overflow-hidden"
+                className="lg:hidden mt-3 pt-3 flex flex-col gap-2 overflow-hidden bg-orange-50/50 -mx-4 sm:-mx-6 px-4 sm:px-6 pb-2 rounded-b-2xl border-t-2 border-orange-100"
               >
                 <div className="flex flex-col gap-2 pt-1">
                   {navItems.map((item, index) => (
                     <motion.button
                       key={item.id}
-                      initial={{ opacity: 0, x: -12 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: index * 0.04 }}
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.05 }}
                       whileTap={{ scale: 0.97 }}
                       onClick={() => handleNavClick(item.view, item.target, item.id)}
                       className={`w-full px-4 py-3.5 rounded-2xl text-left font-black text-xs uppercase tracking-wider flex items-center justify-between transition-all ${
                         activeLink === item.id
                           ? "bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md shadow-orange-500/25"
-                          : "bg-neutral-50 text-neutral-800 border border-neutral-200/60"
+                          : "bg-white text-neutral-800 border border-neutral-200/60 shadow-sm"
                       }`}
                     >
                       <span className="flex items-center gap-2">
+                        <span className="text-base">{item.icon}</span>
                         {item.label}
                         {item.badge && (
                           <span className="text-[8.5px] px-1.5 py-0.5 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white font-extrabold">
@@ -218,25 +220,29 @@ export default function Navbar({
                   ))}
 
                   <motion.button
-                    initial={{ opacity: 0, x: -12 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: navItems.length * 0.04 }}
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: navItems.length * 0.05 }}
                     whileTap={{ scale: 0.97 }}
                     onClick={() => handleNavClick("home", "locations", "locations")}
-                    className="w-full px-4 py-3.5 rounded-2xl text-left font-black text-xs uppercase tracking-wider bg-neutral-50 text-neutral-800 flex items-center justify-between transition-all border border-neutral-200/60"
+                    className="w-full px-4 py-3.5 rounded-2xl text-left font-black text-xs uppercase tracking-wider bg-white text-neutral-800 flex items-center justify-between transition-all border border-neutral-200/60 shadow-sm"
                   >
-                    <span>📍 Visit Now</span>
+                    <span className="flex items-center gap-2">
+                      <span className="text-base">📍</span> Visit Now
+                    </span>
                     <ArrowUpRight className="w-4 h-4 text-orange-500" />
                   </motion.button>
                 </div>
 
-                <div className="pt-2 pb-2 flex flex-col gap-2.5">
+                <div className="w-full h-px bg-orange-200/60 my-2"></div>
+
+                <div className="pb-2 flex flex-col gap-2.5">
                   <button
                     onClick={() => {
                       setMobileMenuOpen(false);
                       onOpenBooking("table");
                     }}
-                    className="py-4 font-black text-sm uppercase border-2 border-orange-500 text-orange-600 rounded-2xl hover:bg-orange-50 transition-all text-center tracking-wider"
+                    className="w-full py-4 font-black text-sm uppercase border-2 border-orange-500 text-orange-600 rounded-2xl hover:bg-orange-50 transition-all text-center tracking-wider"
                   >
                     Reserve a Table
                   </button>
@@ -245,7 +251,7 @@ export default function Navbar({
                       setMobileMenuOpen(false);
                       onOpenBooking("workshop");
                     }}
-                    className="py-4 font-black text-sm uppercase bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 text-white rounded-2xl shadow-lg shadow-orange-500/25 text-center tracking-wider"
+                    className="w-full py-4 font-black text-sm uppercase bg-gradient-to-r from-orange-500 via-amber-500 to-orange-600 text-white rounded-2xl shadow-lg shadow-orange-500/25 text-center tracking-wider"
                   >
                     ✨ Book Workshop Experience
                   </button>

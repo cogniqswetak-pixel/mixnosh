@@ -475,15 +475,31 @@ export default function DiningSection({
                 </div>
 
                 {/* Book Spread Frame */}
-                <div className="relative bg-[#fffdf9] border-2 border-orange-200 rounded-3xl shadow-xl overflow-hidden">
+                <div 
+                  className="relative bg-[#fffdf9] border-2 border-orange-200 rounded-3xl shadow-xl overflow-visible"
+                  style={{ perspective: '1200px' }}
+                >
                   <AnimatePresence mode="wait">
                     <motion.div
                       key={currentPage}
-                      initial={{ opacity: 0, x: flipDirection === "next" ? 30 : -30 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: flipDirection === "next" ? -30 : 30 }}
-                      transition={{ duration: 0.35, ease: "easeOut" }}
-                      className="grid grid-cols-1 md:grid-cols-2 p-6 sm:p-10 lg:p-12 gap-8 md:gap-12 min-h-[460px]"
+                      initial={{ 
+                        rotateY: flipDirection === 'next' ? 90 : -90,
+                        opacity: 0,
+                        transformOrigin: flipDirection === 'next' ? 'left center' : 'right center'
+                      }}
+                      animate={{ 
+                        rotateY: 0, 
+                        opacity: 1,
+                        transformOrigin: flipDirection === 'next' ? 'left center' : 'right center'
+                      }}
+                      exit={{ 
+                        rotateY: flipDirection === 'next' ? -90 : 90,
+                        opacity: 0,
+                        transformOrigin: flipDirection === 'next' ? 'left center' : 'right center'
+                      }}
+                      transition={{ duration: 0.6, ease: [0.4, 0, 0.2, 1] }}
+                      style={{ perspective: '1200px', transformStyle: 'preserve-3d' }}
+                      className="relative grid grid-cols-1 md:grid-cols-2 p-6 sm:p-10 lg:p-12 gap-8 md:gap-12 min-h-[460px]"
                     >
                       {/* LEFT PAGE */}
                       <div className="flex flex-col justify-between border-b md:border-b-0 md:border-r border-orange-200/60 pr-0 md:pr-8 pb-8 md:pb-0">
@@ -580,6 +596,14 @@ export default function DiningSection({
                           <span>Mixnosh Art Cafe</span>
                         </div>
                       </div>
+
+                      {/* Page shadow overlay for realism */}
+                      <div 
+                        className="absolute inset-0 pointer-events-none rounded-3xl" 
+                        style={{ 
+                          background: 'linear-gradient(to right, rgba(0,0,0,0.03) 0%, transparent 5%, transparent 95%, rgba(0,0,0,0.03) 100%)',
+                        }} 
+                      />
                     </motion.div>
                   </AnimatePresence>
 

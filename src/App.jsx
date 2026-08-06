@@ -17,6 +17,8 @@ import BookingModal from "./components/BookingModal";
 import MenuModal from "./components/MenuModal";
 import Preloader from "./components/Preloader";
 import Footer from "./components/Footer";
+import ScrollToTop from './components/ScrollToTop';
+import ChatBot from './components/ChatBot';
 
 export default function App() {
   const [currentView, setCurrentView] = useState("home"); // 'home' | 'workshops' | 'workshop-detail'
@@ -120,6 +122,8 @@ export default function App() {
         setCurrentView={setCurrentView}
         onOpenBooking={handleOpenBooking}
       />
+      <ScrollToTop />
+      <ChatBot onOpenBooking={handleOpenBooking} />
     </div>
   );
 }

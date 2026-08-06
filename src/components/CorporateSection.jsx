@@ -129,14 +129,14 @@ export default function CorporateSection({ onOpenBooking }) {
             </p>
 
             {/* Spacious Circular Orbit Container */}
-            <div className="relative w-[320px] sm:w-[470px] md:w-[530px] aspect-square flex items-center justify-center overflow-visible">
+            <div className="relative w-[280px] xs:w-[340px] sm:w-[470px] md:w-[530px] aspect-square flex items-center justify-center overflow-visible">
 
               {/* Center Glow */}
               <div className="absolute inset-[30%] rounded-full bg-gradient-to-br from-orange-100/80 to-amber-50/80 shadow-inner" />
 
               {/* Center Label Badge */}
-              <div className="absolute w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-white shadow-xl flex flex-col items-center justify-center border-2 border-orange-200 z-20 text-center p-2">
-                <span className="text-orange-600 font-black font-heading text-[10px] sm:text-[11px] uppercase tracking-widest leading-tight">
+              <div className="absolute w-16 h-16 sm:w-24 sm:h-24 rounded-full bg-white shadow-xl flex flex-col items-center justify-center border-2 border-orange-200 z-20 text-center p-1.5 sm:p-2">
+                <span className="text-orange-600 font-black font-heading text-[9px] sm:text-[11px] uppercase tracking-widest leading-tight">
                   Trusted<br />Partners
                 </span>
               </div>
@@ -148,9 +148,9 @@ export default function CorporateSection({ onOpenBooking }) {
                   return (
                     <div
                       key={idx}
-                      className="absolute top-1/2 left-1/2 w-14 h-14 sm:w-20 sm:h-20 md:w-22 md:h-22 -ml-7 -mt-7 sm:-ml-10 sm:-mt-10 md:-ml-11 md:-mt-11"
+                      className="absolute top-1/2 left-1/2 w-11 h-11 sm:w-20 sm:h-20 md:w-22 md:h-22 -ml-5.5 -mt-5.5 sm:-ml-10 sm:-mt-10 md:-ml-11 md:-mt-11"
                       style={{
-                        transform: `rotate(${angle}deg) translateY(calc(clamp(-142px, -24vw, -218px))) rotate(-${angle}deg)`,
+                        transform: `rotate(${angle}deg) translateY(calc(clamp(-118px, -24vw, -218px))) rotate(-${angle}deg)`,
                       }}
                     >
                       <div className="w-full h-full bg-white rounded-full p-2.5 shadow-md flex items-center justify-center animate-reverse-orbit border border-orange-100 hover:scale-115 transition-transform cursor-pointer shadow-orange-500/10">
