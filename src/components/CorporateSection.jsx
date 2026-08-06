@@ -129,17 +129,17 @@ export default function CorporateSection({ onOpenBooking }) {
             </p>
 
             {/* Spacious Circular Orbit Container */}
-            <div className="relative w-[300px] xs:w-[340px] sm:w-[480px] lg:w-[540px] xl:w-[580px] aspect-square flex items-center justify-center overflow-visible my-4">
+            <div className="relative w-[290px] sm:w-[460px] lg:w-[520px] aspect-square flex items-center justify-center overflow-visible [--orbit-r:-118px] sm:[--orbit-r:-180px] lg:[--orbit-r:-210px] my-4">
 
               {/* Outer Orbit Guide Ring */}
-              <div className="absolute inset-[9%] rounded-full border border-dashed border-orange-200/80 pointer-events-none" />
+              <div className="absolute inset-[6%] sm:inset-[8%] rounded-full border-2 border-dashed border-orange-200/70 pointer-events-none" />
 
               {/* Center Glow */}
-              <div className="absolute inset-[32%] rounded-full bg-gradient-to-br from-orange-100/90 via-amber-50/80 to-orange-50/50 shadow-inner" />
+              <div className="absolute inset-[30%] sm:inset-[32%] rounded-full bg-gradient-to-br from-orange-100/90 via-amber-50/80 to-orange-50/50 shadow-inner pointer-events-none" />
 
               {/* Center Label Badge */}
-              <div className="absolute w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 rounded-full bg-white shadow-xl flex flex-col items-center justify-center border-2 border-orange-200/90 z-20 text-center p-2">
-                <span className="text-orange-600 font-black font-heading text-[10px] sm:text-xs lg:text-sm uppercase tracking-widest leading-tight">
+              <div className="absolute w-16 h-16 sm:w-24 sm:h-24 lg:w-28 lg:h-28 rounded-full bg-white shadow-xl flex flex-col items-center justify-center border-2 border-orange-200/90 z-20 text-center p-2">
+                <span className="text-orange-600 font-black font-heading text-[9px] sm:text-xs lg:text-sm uppercase tracking-widest leading-tight">
                   Trusted<br />Partners
                 </span>
               </div>
@@ -151,9 +151,9 @@ export default function CorporateSection({ onOpenBooking }) {
                   return (
                     <div
                       key={idx}
-                      className="absolute top-1/2 left-1/2 w-12 h-12 sm:w-16 sm:h-16 lg:w-18 lg:h-18 -ml-6 -mt-6 sm:-ml-8 sm:-mt-8 lg:-ml-9 lg:-mt-9"
+                      className="absolute top-1/2 left-1/2 w-11 h-11 sm:w-15 sm:h-15 lg:w-16 lg:h-16 -ml-5.5 -mt-5.5 sm:-ml-7.5 sm:-mt-7.5 lg:-ml-8 lg:-mt-8"
                       style={{
-                        transform: `rotate(${angle}deg) translateY(-41%) rotate(-${angle}deg)`,
+                        transform: `rotate(${angle}deg) translateY(var(--orbit-r)) rotate(-${angle}deg)`,
                       }}
                     >
                       <div className="w-full h-full bg-white rounded-full p-2 sm:p-2.5 shadow-md flex items-center justify-center animate-reverse-orbit border border-orange-200/80 hover:scale-115 transition-transform cursor-pointer shadow-orange-500/10">
