@@ -182,38 +182,40 @@ export default function AboutSection({ onOpenBooking }) {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.96 }}
                 transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-neutral-900 h-[420px] sm:h-[460px] flex flex-col justify-end group"
+                className="relative rounded-3xl overflow-hidden shadow-2xl border-4 border-white bg-neutral-900 min-h-[480px] sm:h-[460px] flex flex-col justify-between p-5 sm:p-8 group"
               >
                 {/* Background Image */}
                 <img
                   src={activePillar.img}
                   alt={activePillar.title}
-                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-85"
+                  className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-80"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/40 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-neutral-950 via-neutral-950/60 to-black/30" />
 
-                {/* Floating Top Badge */}
-                <span className="absolute top-5 left-5 px-4 py-1.5 rounded-full bg-white/95 text-neutral-900 text-xs font-black uppercase tracking-wider shadow-md backdrop-blur-md">
-                  ✨ {activePillar.badge}
-                </span>
+                {/* Top Badge */}
+                <div className="relative z-10">
+                  <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/95 text-neutral-900 text-[11px] sm:text-xs font-black uppercase tracking-wider shadow-md backdrop-blur-md">
+                    ✨ {activePillar.badge}
+                  </span>
+                </div>
 
-                {/* Card Content Overlay */}
-                <div className="relative z-10 p-6 sm:p-8 space-y-4">
+                {/* Bottom Content Overlay */}
+                <div className="relative z-10 space-y-3.5 pt-6">
                   <div>
-                    <h3 className="text-white font-heading font-black text-2xl sm:text-3xl uppercase tracking-tight">
+                    <h3 className="text-white font-heading font-black text-xl sm:text-2xl lg:text-3xl uppercase tracking-tight leading-tight">
                       {activePillar.title}
                     </h3>
-                    <p className="text-orange-300 text-xs sm:text-sm font-bold mt-1">
+                    <p className="text-orange-300 text-xs sm:text-sm font-bold mt-1 leading-snug">
                       {activePillar.tagline}
                     </p>
                   </div>
 
                   {/* Highlights Grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {activePillar.highlights.slice(0, 4).map((point, i) => (
                       <div
                         key={i}
-                        className="flex items-center gap-2 bg-black/40 backdrop-blur-md px-3 py-2 rounded-xl border border-white/10"
+                        className="flex items-center gap-2 bg-black/50 backdrop-blur-md px-3 py-2 rounded-xl border border-white/10"
                       >
                         <CheckCircle2 className="w-4 h-4 text-orange-400 flex-shrink-0" />
                         <span className="text-white text-xs font-semibold line-clamp-1">
@@ -223,22 +225,22 @@ export default function AboutSection({ onOpenBooking }) {
                     ))}
                   </div>
 
-                  {/* Action Button */}
-                  <div className="pt-2 flex items-center justify-between gap-4">
+                  {/* Action Buttons */}
+                  <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                     <button
                       onClick={() => setActiveModal(activePillar)}
-                      className="px-6 py-3 rounded-full bg-white text-neutral-950 font-heading font-black text-xs uppercase tracking-widest hover:bg-orange-500 hover:text-white transition-all cursor-pointer shadow-lg flex items-center gap-2"
+                      className="w-full sm:w-auto px-5 py-3 rounded-full bg-white text-neutral-950 font-heading font-black text-xs uppercase tracking-wider hover:bg-orange-500 hover:text-white transition-all cursor-pointer shadow-lg flex items-center justify-center gap-2"
                     >
-                      Explore Full Details
+                      Explore Details
                       <ArrowRight className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => {
                         if (onOpenBooking) onOpenBooking("workshop");
                       }}
-                      className="px-6 py-3 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white font-heading font-black text-xs uppercase tracking-widest hover:from-orange-600 hover:to-amber-600 transition-all cursor-pointer shadow-lg shadow-orange-500/30"
+                      className="w-full sm:w-auto px-5 py-3 rounded-full bg-gradient-to-r from-orange-500 to-amber-500 text-white font-heading font-black text-xs uppercase tracking-wider hover:from-orange-600 hover:to-amber-600 transition-all cursor-pointer shadow-lg shadow-orange-500/30 flex items-center justify-center gap-2"
                     >
-                      Book Now
+                      Book Experience Now
                     </button>
                   </div>
                 </div>
