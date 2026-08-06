@@ -29,6 +29,10 @@ const localKnowledge = [
     response: "🌟 Mixnosh is India's First Sneaker & Resin Art Cafe in Bengaluru! It's a unique creative space where you can enjoy gourmet food, custom paint sneakers, and create epoxy resin art all under one roof. We have branches in HSR Layout and Indiranagar!"
   },
   {
+    keywords: ['question', 'questions', 'ask', 'help', 'do', 'capabilities', 'features'],
+    response: "💬 You can ask me about:\n• 📍 Our locations (HSR Layout & Indiranagar)\n• 🎨 Art workshops (Sneaker customization & Resin decor)\n• 🍔 Our menu food items & pricing\n• 🕒 Opening timings & hours\n• 📅 How to book a table or experience slot\n\nOr click the gear icon (⚙️) to add a Gemini API Key to chat freely!"
+  },
+  {
     keywords: ['hi', 'hello', 'hey', 'sup', 'yo'],
     response: "👋 Hello! I am the Mixnosh Assistant. How can I help you discover India's first Sneaker & Resin Art Cafe today?"
   }
