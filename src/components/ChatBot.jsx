@@ -101,13 +101,13 @@ const ChatBot = ({ onOpenBooking }) => {
         id: Date.now(),
         type: 'bot',
         text: cleanKey
-          ? "🔑 Gemini API Key configured successfully! I will now respond using live Google Gemini intelligence. Ask me anything!"
+          ? "🔑 API Key configured successfully! I will now respond using live AI. Ask me anything!"
           : "ℹ️ API Key removed. Reverted to local fallback response assistant."
       }
     ]);
   };
 
-  const askGeminiAPI = async (userText, history) => {
+  const askAI = async (userText) => {
     const systemPrompt = `You are the Mixnosh Assistant, a friendly and helpful AI host for Mixnosh Cafe.
 Mixnosh is India's First Sneaker & Resin Art Cafe, located in Bengaluru (HSR Layout and Indiranagar).
 We offer premium custom painted sneakers, resin art workshops, custom resin keychains/coasters, and top-tier gourmet fusion food.
@@ -125,63 +125,78 @@ Workshops:
 - Custom Kicks Workshop (Sneaker customization)
 - Epoxy Resin Decor (Resin coasters, clocks, trays)
 
-Answer the user's questions in a friendly, conversational, and relatively brief manner (under 3-4 sentences if possible). Be warm and invite them to visit!`;
+Answer the user's questions in a friendly, conversational, and brief manner. Be warm and invite them to visit!`;
 
-    const promptToSend = `${systemPrompt}\n\nUser Question: ${userText}`;
-
-    // Support both API keys (starting with AIzaSy) and Bearer tokens (like AQ...)
-    const isApiKey = apiKey.trim().startsWith('AIzaSy');
-    const url = isApiKey
-      ? `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey.trim()}`
-      : `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`;
-
-    const headers = {
-      'Content-Type': 'application/json',
-    };
-
-    if (!isApiKey) {
-      headers['Authorization'] = `Bearer ${apiKey.trim()}`;
-    }
+    const key = apiKey.trim();
+    const isGroq = key.startsWith('gsk_');
+    const isGemini = key.startsWith('AIzaSy');
 
     try {
-      const response = await fetch(url, {
-        method: 'POST',
-        headers,
-        body: JSON.stringify({
-          contents: [
-            {
-              parts: [{ text: promptToSend }],
-            },
-          ],
-          generationConfig: {
-            maxOutputTokens: 250,
+      if (isGroq) {
+        // ── GROQ API (OpenAI-compatible) ──
+        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${key}`,
+          },
+          body: JSON.stringify({
+            model: 'llama-3.3-70b-versatile',
+            messages: [
+              { role: 'system', content: systemPrompt },
+              { role: 'user', content: userText },
+            ],
+            max_tokens: 300,
             temperature: 0.7,
+          }),
+        });
+        if (!response.ok) {
+          const err = await response.json().catch(() => ({}));
+          throw new Error(`Groq Error ${response.status}: ${err?.error?.message || response.statusText}`);
+        }
+        const data = await response.json();
+        return data.choices?.[0]?.message?.content?.trim() || "I couldn't process that. Please try again!";
+
+      } else if (isGemini) {
+        // ── GOOGLE GEMINI API ──
+        const response = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: `${systemPrompt}\n\nUser: ${userText}` }] }],
+              generationConfig: { maxOutputTokens: 300, temperature: 0.7 },
+            }),
           }
-        }),
-      });
+        );
+        if (!response.ok) throw new Error(`Gemini Error ${response.status}: ${response.statusText}`);
+        const data = await response.json();
+        return data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "I couldn't process that. Please try again!";
 
-      if (!response.ok) {
-        if (response.status === 401) {
-          throw new Error("401 Unauthorized. The API key or token is invalid, un-authorized, or has expired. Note: Google Cloud Access Tokens ('AQ.Ab8...') are temporary credentials that automatically expire after 60 minutes.");
+      } else {
+        // ── BEARER TOKEN (AQ...) fallback ──
+        const response = await fetch(
+          'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent',
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: `${systemPrompt}\n\nUser: ${userText}` }] }],
+              generationConfig: { maxOutputTokens: 300, temperature: 0.7 },
+            }),
+          }
+        );
+        if (!response.ok) {
+          if (response.status === 401) throw new Error("401 Unauthorized. This token has expired (AQ... tokens expire after 60 mins). Use a Groq key (gsk_...) or Gemini key (AIzaSy...) instead.");
+          throw new Error(`API Error ${response.status}: ${response.statusText}`);
         }
-        if (response.status === 403) {
-          throw new Error("403 Forbidden. This key is restricted or the Gemini API is not available in your region/country.");
-        }
-        if (response.status === 404) {
-          throw new Error("404 Model Not Found. The selected model is not supported or accessible on this key tier.");
-        }
-        throw new Error(`API Error: ${response.status} ${response.statusText}`);
+        const data = await response.json();
+        return data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "I couldn't process that. Please try again!";
       }
-
-      const data = await response.json();
-      const generatedText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (generatedText) {
-        return generatedText.trim();
-      }
-      return "I couldn't process that response. Please try again!";
     } catch (err) {
       console.error(err);
-      return `⚠️ Gemini API Error:\n${err.message || 'Unable to fetch response'}\n\n👉 You can obtain a free, valid Gemini API Key by visiting: https://aistudio.google.com/`;
+      return `⚠️ AI Error:\n${err.message || 'Unable to fetch response'}\n\n👉 Get a free Groq key at: https://console.groq.com`;
     }
   };
 
@@ -200,7 +215,7 @@ Answer the user's questions in a friendly, conversational, and relatively brief 
     // Call API or Fallback
     let botResponse = '';
     if (apiKey) {
-      botResponse = await askGeminiAPI(promptText, messages);
+      botResponse = await askAI(promptText);
     } else {
       // Mock delay
       await new Promise(resolve => setTimeout(resolve, 800));
