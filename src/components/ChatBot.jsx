@@ -127,32 +127,38 @@ Workshops:
 
 Answer the user's questions in a friendly, conversational, and relatively brief manner (under 3-4 sentences if possible). Be warm and invite them to visit!`;
 
-    // Map React message state to Gemini API content format
-    const contents = [];
-    // Inject system instructions in systemInstruction parameter or prepended to input prompt
     const promptToSend = `${systemPrompt}\n\nUser Question: ${userText}`;
 
+    // Support both API keys (starting with AIzaSy) and Bearer tokens (like AQ...)
+    const isApiKey = apiKey.trim().startsWith('AIzaSy');
+    const url = isApiKey
+      ? `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey.trim()}`
+      : `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`;
+
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+
+    if (!isApiKey) {
+      headers['Authorization'] = `Bearer ${apiKey.trim()}`;
+    }
+
     try {
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            contents: [
-              {
-                parts: [{ text: promptToSend }],
-              },
-            ],
-            generationConfig: {
-              maxOutputTokens: 250,
-              temperature: 0.7,
-            }
-          }),
-        }
-      );
+      const response = await fetch(url, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [{ text: promptToSend }],
+            },
+          ],
+          generationConfig: {
+            maxOutputTokens: 250,
+            temperature: 0.7,
+          }
+        }),
+      });
 
       if (!response.ok) {
         throw new Error(`API Error: ${response.status} ${response.statusText}`);
